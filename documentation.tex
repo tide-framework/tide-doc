@@ -1,0 +1,50 @@
+\documentclass[a4paper,10pt,twoside]{book}
+
+\usepackage{graphicx}
+\usepackage[normalem]{ulem}
+
+\newcommand{\ct}[1]}
+\usepackage{listings}
+
+\lstnewenvironment{code}[1]{%
+	\lstset{%
+		% frame=lines,
+		frame=single,
+		framerule=0pt,
+		mathescape=false
+	}
+}{}
+
+\lstnewenvironment{script}[2][defaultlabel]{%
+\renewcommand{\lstlistingname}{Script}%
+	\lstset{
+		% frame=lines,
+		frame=single,
+		framerule=0pt,
+		mathescape=false,
+		name={Script},
+		caption={\emph{#2}},
+		label={scr:#1}
+	}
+}{}
+\usepackage{fixltx2e}
+\usepackage[
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=black,
+	citecolor=black
+]{hyperref}
+
+\begin{document}
+
+\part{Introduction}
+\href{https://github.com/tide-framework/tide}{Tide} is a web framework that allows seemless communication between \href{http://amber-lang.net}{Amber} and \href{http://pharo-project.org}{Pharo}. 
+
+Tide exposes information using the \ct{JSON} format. The \ct{JSON} is built from Pharo objects and sent through the netword to Amber. The \ct{JSON} contain data, but can also contain callbacks information to perform actions from Amber to Pharo.
+
+To make communication as natural as possible, the Amber layer of Tide uses promises to keep the flow of callback calls sequential.
+
+This documentation aims to teach how to install and use Tide through examples, as well as its architecture.
+\part{ Installing Tide}\part{ Starting the server}\part{ The architecture of Tide}\part{ A first example: the traditional counter}\part{ A more advanced example: $<$$<$FIND SOMETHING$>$$>$}\part{ Managing sessions}
+
+\end{document}
