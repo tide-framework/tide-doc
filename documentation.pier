@@ -6,7 +6,7 @@ Tide exposes information using the ==JSON== format. The ==JSON== is built from P
 
 To make communication as natural as possible, the Amber layer of Tide uses promises to keep the flow of callback calls sequential.
 
-This documentation aims to teach how to install and use Tide through examples-, as well as its architecture.
+This documentation aims to teach how to install and use Tide through examples, as well as its architecture.
 
 ! Installing Tide
 
