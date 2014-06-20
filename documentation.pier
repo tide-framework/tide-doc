@@ -32,13 +32,27 @@ platform.
 !!! Bower
 
 Bower is a package manager for the web, and Amber uses Bower to manage 
-dependencies.
+dependencies. The simplest way to use bower is to install it globally as 
+follows:
 
-
-
-
+[[[
+$ npm install -g bower
+]]]
 
 !!! Pharo
+
+Tide requires Pharo 3.0. The simplest way to install it is to evaluate the 
+following:
+
+[[[
+$ curl get.pharo.org/30+vm | bash
+]]]
+
+To start the Pharo image, evaluate:
+
+[[[
+$ ./pharo-ui Pharo.image
+]]]
 
 ! Starting the server
 
