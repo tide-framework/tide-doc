@@ -17,6 +17,29 @@ as well as its architecture.
 
 ! Installing Tide
 
+!! Prerequisites
+
+Tide requires several libraries. It of course depends on Pharo and Amber. Amber
+itself requires ==nodejs== and ==bower== to install its own dependencies. The 
+Pharo-side of Tide requires Zinc, which is part of the default image since 
+Pharo 2.0. Tide however has only been tested with Pharo 3.0.
+
+!!! NodeJs
+
+Go to *nodejs>http://nodejs.org* and install ==node== (and ==npm==) for your
+platform.
+
+!!! Bower
+
+Bower is a package manager for the web, and Amber uses Bower to manage 
+dependencies.
+
+
+
+
+
+!!! Pharo
+
 ! Starting the server
 
 ! The architecture of Tide
