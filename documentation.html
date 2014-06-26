@@ -127,10 +127,7 @@ MyCounter &gt;&gt; increase
 To register the entry point, evaluate:</p>
 <p><figure><pre><code>MyCounter registerAt: 'my-counter'.</code></pre><figcaption></figcaption></figure></p>
 <p>We can deduce two points from the preceding evaluation:</p>
-<ul><li> Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot;</li></ul><p>  instances of the registered class meaning that presenters are not share between user 
-  sessions.</p><ul><li> The entry point will have a <code>handler</code> associated with a fixed entry point </li></ul><p>  url <code>'/my-counter'</code>. When someone will query that registered url, the presenter 
-  will generate <code>JSON</code> data corresponding to its state and actions, and the handler to 
-  send it back in a response to the request.</p>
+<ul><li> Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot; instances of the registered class meaning that presenters are not share between user sessions.</li><li> The entry point will have a <code>handler</code> associated with a fixed entry point  url <code>'/my-counter'</code>. When someone will query that registered url, the presenter will generate <code>JSON</code> data corresponding to its state and actions, and the handler to send it back in a response to the request.</li></ul>
 <p>If we perform a request at <code>http://localhost:5000/my-counter</code>, we get the following 
 <code>JSON</code> data back:</p>
 <p><figure><pre><code>{
@@ -143,6 +140,14 @@ To register the entry point, evaluate:</p>
     &quot;count&quot;:0
   }
 }</code></pre><figcaption></figcaption></figure></p>
+<h2>4.  The Amber application</h2>
+<p>The next step in our example is to create the Amber-side of this counter application.
+We will use Amber to render an HTML view of our counter, and perform actions using proxies
+back to the counter defined in Pharo.</p>
+<h3>4.1.  The widget class</h3>
+
+
+
 <h1> Managing sessions</h1>
 <h1> Handlers</h1>
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.</p>
@@ -152,7 +157,7 @@ To register the entry point, evaluate:</p>
 The reason is that file upalods with the HTTP protocols were not made for asynchronous 
 upalods. Tide tries to solve this problem by abstracting away the implementation details 
 of an AJAX-friendly file upalod with the <code>TDFileHandler</code> class.</p>
-<h2>4.  Creating file upload entry points</h2>
+<h2>5.  Creating file upload entry points</h2>
 
 <h1> Handling exceptions</h1>
 

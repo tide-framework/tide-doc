@@ -235,19 +235,9 @@ MyCounter registerAt: 'my-counter'.
 We can deduce two points from the preceding evaluation:
 
 \begin{itemize}
-\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34}
+\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not share between user sessions.
+\item  The entry point will have a \ct{handler} associated with a fixed entry point  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter will generate \ct{JSON} data corresponding to its state and actions, and the handler to send it back in a response to the request.
 \end{itemize}
-
-  instances of the registered class meaning that presenters are not share between user 
-  sessions.
-
-\begin{itemize}
-\item  The entry point will have a \ct{handler} associated with a fixed entry point 
-\end{itemize}
-
-  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter 
-  will generate \ct{JSON} data corresponding to its state and actions, and the handler to 
-  send it back in a response to the request.
 
 If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get the following 
 \ct{JSON} data back:
@@ -266,7 +256,11 @@ If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get t
 }
 \end{code}
 
-\part{ Managing sessions}\part{ Handlers}
+\chapter{ The Amber application}
+The next step in our example is to create the Amber-side of this counter application.
+We will use Amber to render an HTML view of our counter, and perform actions using proxies
+back to the counter defined in Pharo.
+\section{ The widget class}\part{ Managing sessions}\part{ Handlers}
 \begin{todo}
 
 should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.

@@ -282,17 +282,8 @@ We can deduce two points from the preceding evaluation:
 &nbsp;
 
 
--  Presenter classes are registered as handlers, not instances\. Tide will create "per session"
-  instances of the registered class meaning that presenters are not share between user 
-  sessions\.
-
-&nbsp;
-
-
--  The entry point will have a `handler` associated with a fixed entry point 
-  url `'/my-counter'`\. When someone will query that registered url, the presenter 
-  will generate `JSON` data corresponding to its state and actions, and the handler to 
-  send it back in a response to the request\.
+-  Presenter classes are registered as handlers, not instances\. Tide will create "per session" instances of the registered class meaning that presenters are not share between user sessions\.
+-  The entry point will have a `handler` associated with a fixed entry point  url `'/my-counter'`\. When someone will query that registered url, the presenter will generate `JSON` data corresponding to its state and actions, and the handler to send it back in a response to the request\.
 
 If we perform a request at `http://localhost:5000/my-counter`, we get the following 
 `JSON` data back:
@@ -312,6 +303,21 @@ If we perform a request at `http://localhost:5000/my-counter`, we get the follow
         "count":0
       }
     }
+
+
+
+
+
+##4\.  The Amber application
+
+The next step in our example is to create the Amber\-side of this counter application\.
+We will use Amber to render an HTML view of our counter, and perform actions using proxies
+back to the counter defined in Pharo\.
+
+
+
+###4\.1\.  The widget class
+
 
 
 
@@ -341,7 +347,7 @@ of an AJAX\-friendly file upalod with the `TDFileHandler` class\.
 
 
 
-##4\.  Creating file upload entry points
+##5\.  Creating file upload entry points
 
 
 
