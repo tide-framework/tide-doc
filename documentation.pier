@@ -215,6 +215,13 @@ If we perform a request at ==http://localhost:5000/my-counter==, we get the foll
 
 !! The Amber application
 
+The next step in our example is to create the Amber-side of this counter application.
+We will use Amber to render an HTML view of our counter, and perform actions using proxies
+back to the counter defined in Pharo.
+
+!!! The widget class
+
+
 
 
 ! Managing sessions
