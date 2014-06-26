@@ -229,19 +229,17 @@ back to the counter defined in Pharo.
 
 ! Managing file uploads
 
-Managing file upalods in the context of a flat-client application can be cumbersome. 
-The reason is that file upalods with the HTTP protocols were not made for asynchronous 
-upalods. Tide tries to solve this problem by abstracting away the implementation details 
-of an AJAX-friendly file upalod with the ==TDFileHandler== class.
+Managing file uploads in the context of a flat-client application can be cumbersome. 
+The reason is that file uploads with the HTTP protocols were not made for asynchronous 
+uploads. Tide tries to solve this problem by abstracting away the implementation details 
+of an AJAX-friendly file upload with the ==TDFileHandler== class.
 
 !! Creating file upload entry points
 
 
 ! Handling exceptions
 
-
-
+! Managing sessions
 
 ! A more advanced example: <<FIND SOMETHING>>
 
-! Managing sessions
