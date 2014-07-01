@@ -367,6 +367,8 @@ decrease
 \end{code}
 
 
+Here's a screenshot of the final counter application:
+
 
 \begin{figure}
 
@@ -374,7 +376,30 @@ decrease
 \includegraphics[width=1.0\textwidth]{images/tide-counter.png}\caption{file:$/$$/$images$/$tide-counter.png.\label{images/tide-counter.png}}\end{center}
 \end{figure}
 
-\part{ More on actions}\part{ Managing sessions}\part{ Handlers}
+\part{ Actions}
+We have seen in a nutshell in the previous sections how Tide actions work. They allow callbacks
+to be performed from Amber to Pharo objects.
+
+What we heven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects.
+\chapter{ Action arguments}\section{ Literals}\section{ References}\chapter{ Chaining actions}
+Tide actions can be easily chained without breaking the sequential flow of the application code, 
+using promises. This is an important property of action callbacks, because all requests done in 
+the client must be asynchronous, quickly leading to \symbol{34}spaghetti callbacks\symbol{34} code.
+\section{ Back to the counter example}
+The following code snippet shows how \ct{increase} calls to our counter are chained.
+
+
+\begin{code}{}
+myCounter := TDClientProxy on: '/my-counter'.
+
+myCounter increase; increase.
+myCounter then: [ myCounter count ]. "=> 2"
+
+10 timesRepeat: [ myCounter decrease ].
+myCounter then: [ myCounter count ]. "=> -8"
+\end{code}
+
+\part{ Managing sessions}\part{ Handlers}
 \begin{todo}
 
 should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.

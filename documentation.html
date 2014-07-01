@@ -208,8 +208,28 @@ update the relevant part, the header.</p>
 decrease
 	self counter decrease.
 	self counter then: [ self update ]</code></pre><figcaption></figcaption></figure></p>
+<p>Here's a screenshot of the final counter application:</p>
 <p><figure><img src="images/tide-counter.png"></img><figcaption></figcaption></figure></p>
-<h1> More on actions</h1>
+<h1> Actions</h1>
+<p>We have seen in a nutshell in the previous sections how Tide actions work. They allow callbacks
+to be performed from Amber to Pharo objects.</p>
+<p>What we heven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects.</p>
+<h2>5.  Action arguments</h2>
+<h3>5.1.  Literals</h3>
+<h3>5.2.  References</h3>
+<h2>6.  Chaining actions</h2>
+<p>Tide actions can be easily chained without breaking the sequential flow of the application code, 
+using promises. This is an important property of action callbacks, because all requests done in 
+the client must be asynchronous, quickly leading to &quot;spaghetti callbacks&quot; code.</p>
+<h3>6.1.  Back to the counter example</h3>
+<p>The following code snippet shows how <code>increase</code> calls to our counter are chained.</p>
+<p><figure><pre><code>myCounter := TDClientProxy on: '/my-counter'.
+
+myCounter increase; increase.
+myCounter then: [ myCounter count ]. &quot;=&gt; 2&quot;
+
+10 timesRepeat: [ myCounter decrease ].
+myCounter then: [ myCounter count ]. &quot;=&gt; -8&quot;</code></pre><figcaption></figcaption></figure></p>
 <h1> Managing sessions</h1>
 <h1> Handlers</h1>
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.</p>
@@ -219,7 +239,7 @@ decrease
 The reason is that file uploads with the HTTP protocols were not made for asynchronous 
 uploads. Tide tries to solve this problem by abstracting away the implementation details 
 of an AJAX-friendly file upload with the <code>TDFileHandler</code> class.</p>
-<h2>5.  Creating file upload entry points</h2>
+<h2>7.  Creating file upload entry points</h2>
 
 <h1> Handling exceptions</h1>
 <h1> A more advanced example: &lt;&lt;FIND SOMETHING&gt;&gt;</h1>

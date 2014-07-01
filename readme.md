@@ -446,11 +446,59 @@ We still miss two methods to actually increase and decrease our counter:
 
 
 
+Here's a screenshot of the final counter application:
+
 <a name=""></a>![](images/tide-counter.png "file://images/tide-counter.png")
 
 
 
-# More on actions
+# Actions
+
+We have seen in a nutshell in the previous sections how Tide actions work\. They allow callbacks
+to be performed from Amber to Pharo objects\.
+
+What we heven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects\.
+
+
+
+##5\.  Action arguments
+
+
+
+###5\.1\.  Literals
+
+
+
+###5\.2\.  References
+
+
+
+##6\.  Chaining actions
+
+Tide actions can be easily chained without breaking the sequential flow of the application code, 
+using promises\. This is an important property of action callbacks, because all requests done in 
+the client must be asynchronous, quickly leading to "spaghetti callbacks" code\.
+
+
+
+###6\.1\.  Back to the counter example
+
+The following code snippet shows how `increase` calls to our counter are chained\.
+
+
+&nbsp;
+
+
+
+    myCounter := TDClientProxy on: '/my-counter'.
+    
+    myCounter increase; increase.
+    myCounter then: [ myCounter count ]. "=> 2"
+    
+    10 timesRepeat: [ myCounter decrease ].
+    myCounter then: [ myCounter count ]. "=> -8"
+
+
 
 
 
@@ -478,7 +526,7 @@ of an AJAX\-friendly file upload with the `TDFileHandler` class\.
 
 
 
-##5\.  Creating file upload entry points
+##7\.  Creating file upload entry points
 
 
 
