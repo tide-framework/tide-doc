@@ -502,6 +502,32 @@ The following code snippet shows how `increase` calls to our counter are chained
 
 
 
+# Presenters
+
+Tide tries to make it easy to create presenters on domain objects\.
+
+
+
+##7\.  Root presenters
+
+
+
+##8\.  Answering new presenters from action callbacks
+
+
+
+##9\.  Builtin presenter classes
+
+
+
+##10\.  Custom presenters
+
+
+
+##11\.  Presenters and security
+
+
+
 # Managing sessions
 
 
@@ -513,10 +539,6 @@ The following code snippet shows how `increase` calls to our counter are chained
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler\.</p>
 
 
-# Creating custom Presenters
-
-
-
 # Managing file uploads
 
 Managing file uploads in the context of a flat\-client application can be cumbersome\. 
@@ -526,7 +548,7 @@ of an AJAX\-friendly file upload with the `TDFileHandler` class\.
 
 
 
-##7\.  Creating file upload entry points
+##12\.  Creating file upload entry points
 
 
 

@@ -230,16 +230,22 @@ myCounter then: [ myCounter count ]. &quot;=&gt; 2&quot;
 
 10 timesRepeat: [ myCounter decrease ].
 myCounter then: [ myCounter count ]. &quot;=&gt; -8&quot;</code></pre><figcaption></figcaption></figure></p>
+<h1> Presenters</h1>
+<p>Tide tries to make it easy to create presenters on domain objects.</p>
+<h2>7.  Root presenters</h2>
+<h2>8.  Answering new presenters from action callbacks</h2>
+<h2>9.  Builtin presenter classes</h2>
+<h2>10.  Custom presenters</h2>
+<h2>11.  Presenters and security</h2>
 <h1> Managing sessions</h1>
 <h1> Handlers</h1>
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.</p>
-<h1> Creating custom Presenters</h1>
 <h1> Managing file uploads</h1>
 <p>Managing file uploads in the context of a flat-client application can be cumbersome. 
 The reason is that file uploads with the HTTP protocols were not made for asynchronous 
 uploads. Tide tries to solve this problem by abstracting away the implementation details 
 of an AJAX-friendly file upload with the <code>TDFileHandler</code> class.</p>
-<h2>7.  Creating file upload entry points</h2>
+<h2>12.  Creating file upload entry points</h2>
 
 <h1> Handling exceptions</h1>
 <h1> A more advanced example: &lt;&lt;FIND SOMETHING&gt;&gt;</h1>

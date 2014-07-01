@@ -349,13 +349,25 @@ myCounter then: [ myCounter count ]. "=> 2"
 myCounter then: [ myCounter count ]. "=> -8"
 ]]]
 
+! Presenters
+
+Tide tries to make it easy to create presenters on domain objects.
+
+!! Root presenters
+
+!! Answering new presenters from action callbacks
+
+!! Builtin presenter classes
+
+!! Custom presenters
+
+!! Presenters and security
+
 ! Managing sessions
 
 ! Handlers
 
 @@todo should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.
-
-! Creating custom Presenters
 
 ! Managing file uploads
 
