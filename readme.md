@@ -316,10 +316,141 @@ back to the counter defined in Pharo\.
 
 
 
-###4\.1\.  The widget class
+###4\.1\.  The client\-side API
+
+On the client\-side, root presenters exposed as handler can be accessed by creating proxies:
+
+
+&nbsp;
 
 
 
+    myProxy := TDClientProxy on: '/my-counter'.
+
+
+
+Message sent to proxies will be resolved using its **state** and **actions\+** as defined on 
+the server\-side\.
+
+Calls to state methods are resolved locally and synchronously, because the state is passed
+over to Amber as we previously say in the JSON data\.
+
+Calls to action methods perform requests that will result in performing the corresponding
+method on the pharo object asynchronously\. Once the action is performed, the proxy will
+be automatically updated with possible new state and actions\.
+
+Since action calls are not synchronous, Tide proxies have a special method `then:` used
+to perform actions only when and if the action is resolved and the proxy updated\.
+
+
+&nbsp;
+
+
+
+    "synchronous state call"
+    myProxy count. "=> 0"
+    
+    "async action call"
+    myProxy increase; then: [
+        myProxy count "=> 1" ]
+
+
+
+
+
+###4\.2\.  The widget class
+
+In Amber's IDE, create a new class `MyCounterWidget`\. 
+
+
+&nbsp;
+
+
+
+    Widget subclass: #MyCounterWidget
+    	instanceVariableNames: 'counter header'
+    	package: 'Tide-Amber-Examples'
+
+
+
+The widget class has two instance variables: `counter`, which is hold a proxy over the 
+Pharo counter object, and `header` which will hold a reference on the header tag brush to
+update the UI\.
+
+To initialize our counter widget, we connect it to the Pharo counter presenter as follows:
+
+
+&nbsp;
+
+
+
+    initialize
+        super initialize.
+        counter := TDClientProxy on: '/my-counter'
+
+
+
+Note that `'/my-counter'` is the path to the server\-side handler for our counter presenter\.
+
+We can now create the rendering methods\.
+
+
+&nbsp;
+
+
+
+    render
+        counter connect then: [
+            self appendToJQuery: 'body' asJQuery ]
+    
+    
+    renderOn: html
+    	header := html h1 with: counter count asString.
+    	html button 
+    		with: '++';
+    		onClick: [ self increase ].
+    	html button 
+    		with: '--';
+    		onClick: [ self decrease ]
+    
+    update
+    	header contents: [ :html |
+    		html with: counter count asString ]
+
+
+
+The `render` method waits for the counter to be connected, then appends the widget to the
+`body` element of the page \(using the `renderOn:` method\)\.
+
+`renderOn:` is a typical widget rendering method using the builtin Amber `HTMLCanvas`\.
+The `count` message send to the `counter` proxy will be resolved as a state accessor as
+defined on the server\-side\.
+
+Finally instead of updating the entire HTML contents of the counter, `update` will only 
+update the relevant part, the header\.
+
+We still miss two methods to actually increase and decrease our counter:
+
+
+&nbsp;
+
+
+
+    increase
+    	self counter increase.
+    	self counter then: [ self update ]
+    
+    decrease
+    	self counter decrease.
+    	self counter then: [ self update ]
+
+
+
+<a name=""></a>![](images/tide-counter.png "file://images/tide-counter.png")
+
+
+
+# More on actions
 
 
 
@@ -353,10 +484,6 @@ of an AJAX\-friendly file upload with the `TDFileHandler` class\.
 
 
 # Handling exceptions
-
-
-
-# Managing sessions
 
 
 

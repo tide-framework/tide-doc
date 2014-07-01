@@ -144,10 +144,72 @@ To register the entry point, evaluate:</p>
 <p>The next step in our example is to create the Amber-side of this counter application.
 We will use Amber to render an HTML view of our counter, and perform actions using proxies
 back to the counter defined in Pharo.</p>
-<h3>4.1.  The widget class</h3>
+<h3>4.1.  The client-side API</h3>
+<p>On the client-side, root presenters exposed as handler can be accessed by creating proxies:</p>
+<p><figure><pre><code>myProxy := TDClientProxy on: '/my-counter'.</code></pre><figcaption></figcaption></figure></p>
+<p>Message sent to proxies will be resolved using its <strong>state</strong> and <strong>actions+</strong> as defined on 
+the server-side.</p>
+<p>Calls to state methods are resolved locally and synchronously, because the state is passed
+over to Amber as we previously say in the JSON data.</p>
+<p>Calls to action methods perform requests that will result in performing the corresponding
+method on the pharo object asynchronously. Once the action is performed, the proxy will
+be automatically updated with possible new state and actions.</p>
+<p>Since action calls are not synchronous, Tide proxies have a special method <code>then:</code> used
+to perform actions only when and if the action is resolved and the proxy updated.</p>
+<p><figure><pre><code>&quot;synchronous state call&quot;
+myProxy count. &quot;=&gt; 0&quot;
+
+&quot;async action call&quot;
+myProxy increase; then: [
+    myProxy count &quot;=&gt; 1&quot; ]</code></pre><figcaption></figcaption></figure></p>
+<h3>4.2.  The widget class</h3>
+<p>In Amber's IDE, create a new class <code>MyCounterWidget</code>. </p>
+<p><figure><pre><code>Widget subclass: #MyCounterWidget
+	instanceVariableNames: 'counter header'
+	package: 'Tide-Amber-Examples'</code></pre><figcaption></figcaption></figure></p>
+<p>The widget class has two instance variables: <code>counter</code>, which is hold a proxy over the 
+Pharo counter object, and <code>header</code> which will hold a reference on the header tag brush to
+update the UI.</p>
+<p>To initialize our counter widget, we connect it to the Pharo counter presenter as follows:</p>
+<p><figure><pre><code>initialize
+    super initialize.
+    counter := TDClientProxy on: '/my-counter'</code></pre><figcaption></figcaption></figure></p>
+<p>Note that <code>'/my-counter'</code> is the path to the server-side handler for our counter presenter.</p>
+<p>We can now create the rendering methods.</p>
+<p><figure><pre><code>render
+    counter connect then: [
+        self appendToJQuery: 'body' asJQuery ]
 
 
+renderOn: html
+	header := html h1 with: counter count asString.
+	html button 
+		with: '++';
+		onClick: [ self increase ].
+	html button 
+		with: '--';
+		onClick: [ self decrease ]
 
+update
+	header contents: [ :html |
+		html with: counter count asString ]</code></pre><figcaption></figcaption></figure></p>
+<p>The <code>render</code> method waits for the counter to be connected, then appends the widget to the
+<code>body</code> element of the page (using the <code>renderOn:</code> method).</p>
+<p><code>renderOn:</code> is a typical widget rendering method using the builtin Amber <code>HTMLCanvas</code>.
+The <code>count</code> message send to the <code>counter</code> proxy will be resolved as a state accessor as
+defined on the server-side.</p>
+<p>Finally instead of updating the entire HTML contents of the counter, <code>update</code> will only 
+update the relevant part, the header.</p>
+<p>We still miss two methods to actually increase and decrease our counter:</p>
+<p><figure><pre><code>increase
+	self counter increase.
+	self counter then: [ self update ]
+
+decrease
+	self counter decrease.
+	self counter then: [ self update ]</code></pre><figcaption></figcaption></figure></p>
+<p><figure><img src="images/tide-counter.png"></img><figcaption></figcaption></figure></p>
+<h1> More on actions</h1>
 <h1> Managing sessions</h1>
 <h1> Handlers</h1>
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.</p>
@@ -160,7 +222,6 @@ of an AJAX-friendly file upload with the <code>TDFileHandler</code> class.</p>
 <h2>5.  Creating file upload entry points</h2>
 
 <h1> Handling exceptions</h1>
-<h1> Managing sessions</h1>
 <h1> A more advanced example: &lt;&lt;FIND SOMETHING&gt;&gt;</h1>
 
     </div>
