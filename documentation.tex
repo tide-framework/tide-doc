@@ -38,6 +38,12 @@
 \begin{document}
 
 \part{Introduction}
+You would like to develop advanced client side application without having to deal with the asynchronous 
+nature of Javascript. You would love to share your models between your client and your server: Tide
+is made for you.
+
+SD: more Sexy intro: client side.
+
 \href{https://github.com/tide-framework/tide}{Tide} is a web framework that allows 
 seemless communication between \href{http://amber-lang.net}{Amber} and 
 \href{http://pharo-project.org}{Pharo}. 
@@ -49,11 +55,15 @@ to perform actions from Amber to Pharo objects. Having both data and actions
 sent to Amber makes Tide a very good communication protocol between the two 
 Smalltalks.
 
+SD: Add asbtract away the problem of synchronisation$/$concurrency of JS. 
+
 To make communication as natural as possible, the Amber layer of Tide uses 
 promises to keep the flow of callback calls sequential.
 
 This documentation aims to teach how to install and use Tide through examples, 
 as well as its architecture.
+
+SD: What we will learn concretely.
 \part{ Installing Tide}\chapter{ Prerequisites}
 Tide requires several libraries. It of course depends on Pharo and Amber. Amber
 itself requires \ct{nodejs} and \ct{bower} to install its own dependencies. The 
@@ -90,8 +100,12 @@ $ ./pharo-ui Pharo.image
 \end{code}
 
 \subsection{ Preparing the Pharo image}
+SD: We can also do it from the command line and it would be good to show how. 
+SD:Would be good to have one release of tide 
+to avoid development. 
+
 Once you get the Pharo window open, you have to install the Tide backend part. 
-This means bringing the Pharo code you cloned from GitHub into the Pharo image.
+This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.
 
 \begin{itemize}
 \item  Click on the background of the Pharo window
@@ -111,6 +125,8 @@ Metacello new
 \end{code}
 
 
+SD:Why the following is not in the troubleshooting session and bower install is not executed before?
+
 When this is finished, evaluate:
 
 
@@ -129,6 +145,8 @@ $ bower install
 \end{code}
 
 
+SD: add screenshots
+
 Back in the Pharo window, close the error message and evaluate the same instruction 
 again:
 
@@ -140,6 +158,8 @@ TDDispatcher tideIndexPageUrl inspect
 
 This should give you the URL at which your web browser should be pointed to. 
 Now copy this URL, open your web browser and paste it in the browser's address bar.
+
+SD: why do we need to do this inspects? because it gives the impression that everything is manual?
 \section{ Starting the server}
 The \ct{TDServer} class provides a convenient way to start$/$stop a Tide server, using
 Zinc behind the scenes:
@@ -151,16 +171,24 @@ TDServer stop. "Stop any running server"
 \end{code}
 
 \part{ A first example: the traditional counter}
-In order to get started with Tide, we will implement the traditional counter example.
+To get started with Tide, we will implement the traditional counter example as shown in the following figure \ref{tideCounter}. 
 
-Tide already includes such an example in the \ct{Tide-Examples} package that you can 
-refer to.
+
+\begin{figure}
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{images/tide-counter.png}\caption{A tide counter.\label{tideCounter}}\end{center}
+\end{figure}
+
+
+Note that Tide already includes such an example in the \ct{Tide-Examples} package that you can refer to.
+But better follow step by step the example.
 \chapter{ The presenter}
 A counter application should contain two buttons, one to increase and the other one to
 decrease a count. It should also display the count value to the user.
 
 While this application might seem extremely simplistic, it already shows some of the 
-core principles behing Tide: Presenters and Proxies.
+core principles behind Tide: Presenters and Proxies.
 
 We start by creating the \ct{MyCounter} class in Pharo by subclassing \ct{TDPResenter}.
 
@@ -185,6 +213,8 @@ MyCounter >> initialize
     count := 0
 \end{code}
 
+
+SD: no super initialize?
 
 To display the count value to the user, we will need to expose \ct{count} using an accessor.
 We also add two methods to increase and decrease our counter:
@@ -232,10 +262,14 @@ MyCounter registerAt: 'my-counter'.
 \end{code}
 
 
-We can deduce two points from the preceding evaluation:
+SD: does it work? how to access it? localhost:5000.....
+SD: show the result
+SD: not yet. 
+\chapter{ Stepping back}
+We can deduce two points from the preceding example:
 
 \begin{itemize}
-\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not share between user sessions.
+\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not shared between user sessions.
 \item  The entry point will have a \ct{handler} associated with a fixed entry point  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter will generate \ct{JSON} data corresponding to its state and actions, and the handler to send it back in a response to the request.
 \end{itemize}
 
@@ -258,6 +292,8 @@ If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get t
 
 \chapter{ The Amber application}
 The next step in our example is to create the Amber-side of this counter application.
+
+SD: say that amber will do it for us: 
 We will use Amber to render an HTML view of our counter, and perform actions using proxies
 back to the counter defined in Pharo.
 \section{ The client-side API}
@@ -269,14 +305,14 @@ myProxy := TDClientProxy on: '/my-counter'.
 \end{code}
 
 
-Message sent to proxies will be resolved using its \textbf{state} and \textbf{actions+} as defined on 
+Messages sent to proxies will be resolved using their \textbf{state} and \textbf{actions+} as defined on 
 the server-side.
 
 Calls to state methods are resolved locally and synchronously, because the state is passed
 over to Amber as we previously say in the JSON data.
 
 Calls to action methods perform requests that will result in performing the corresponding
-method on the pharo object asynchronously. Once the action is performed, the proxy will
+method on the Pharo object asynchronously. Once the action is performed, the proxy will
 be automatically updated with possible new state and actions.
 
 Since action calls are not synchronous, Tide proxies have a special method \ct{then:} used
@@ -292,6 +328,8 @@ myProxy increase; then: [
     myProxy count "=> 1" ]
 \end{code}
 
+
+SD: the developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
 \section{ The widget class}
 In Amber's IDE, create a new class \ct{MyCounterWidget}. 
 
@@ -303,15 +341,15 @@ Widget subclass: #MyCounterWidget
 \end{code}
 
 
-The widget class has two instance variables: \ct{counter}, which is hold a proxy over the 
-Pharo counter object, and \ct{header} which will hold a reference on the header tag brush to
+The widget class has two instance variables: \ct{counter}, which holds a proxy over the 
+Pharo counter object, and \ct{header} which  holds a reference on the header tag brush to
 update the UI.
 
 To initialize our counter widget, we connect it to the Pharo counter presenter as follows:
 
 
 \begin{code}{}
-initialize
+MyCounterWidget >> initialize
     super initialize.
     counter := TDClientProxy on: '/my-counter'
 \end{code}
@@ -323,12 +361,12 @@ We can now create the rendering methods.
 
 
 \begin{code}{}
-render
+MyCounterWidget >> render
     counter connect then: [
         self appendToJQuery: 'body' asJQuery ]
 
 
-renderOn: html
+MyCounterWidget >> renderOn: html
 	header := html h1 with: counter count asString.
 	html button 
 		with: '++';
@@ -337,7 +375,7 @@ renderOn: html
 		with: '--';
 		onClick: [ self decrease ]
 
-update
+MyCounterWidget >> update
 	header contents: [ :html |
 		html with: counter count asString ]
 \end{code}
@@ -346,7 +384,9 @@ update
 The \ct{render} method waits for the counter to be connected, then appends the widget to the
 \ct{body} element of the page (using the \ct{renderOn:} method).
 
-\ct{renderOn:} is a typical widget rendering method using the builtin Amber \ct{HTMLCanvas}.
+SD: why the previous part is not in the framework. Why all the user will have to define it?
+
+  \ct{renderOn:} is a typical widget rendering method using the builtin Amber \ct{HTMLCanvas}.
 The \ct{count} message send to the \ct{counter} proxy will be resolved as a state accessor as
 defined on the server-side.
 
@@ -357,11 +397,11 @@ We still miss two methods to actually increase and decrease our counter:
 
 
 \begin{code}{}
-increase
+MyCounterWidget >> increase
 	self counter increase.
 	self counter then: [ self update ]
 
-decrease
+MyCounterWidget >> decrease
 	self counter decrease.
 	self counter then: [ self update ]
 \end{code}
@@ -380,13 +420,16 @@ Here's a screenshot of the final counter application:
 We have seen in a nutshell in the previous sections how Tide actions work. They allow callbacks
 to be performed from Amber to Pharo objects.
 
-What we heven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects.
+What we haven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects.
 \chapter{ Action arguments}\section{ Literals}\section{ References}\chapter{ Chaining actions}
 Tide actions can be easily chained without breaking the sequential flow of the application code, 
 using promises. This is an important property of action callbacks, because all requests done in 
 the client must be asynchronous, quickly leading to \symbol{34}spaghetti callbacks\symbol{34} code.
+
+SD: here we should have a JS example of async and show how we can express it in tide. 
 \section{ Back to the counter example}
 The following code snippet shows how \ct{increase} calls to our counter are chained.
+SD: using \ct{then:}
 
 
 \begin{code}{}
@@ -411,6 +454,8 @@ Managing file uploads in the context of a flat-client application can be cumbers
 The reason is that file uploads with the HTTP protocols were not made for asynchronous 
 uploads. Tide tries to solve this problem by abstracting away the implementation details 
 of an AJAX-friendly file upload with the \ct{TDFileHandler} class.
-\chapter{ Creating file upload entry points}\part{ Handling exceptions}\part{ A more advanced example: $<$$<$FIND SOMETHING$>$$>$}
+\chapter{ Creating file upload entry points}\part{ Handling exceptions}\part{ A more advanced example: }
+We should use the example of the book of Olivier: a comix collection. 
+
 
 \end{document}
