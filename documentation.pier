@@ -169,10 +169,9 @@ Our class has one instance variable ==count==, that we initialize to ==0==:
 
 [[[[
 MyCounter >> initialize
+    super initialize.
     count := 0
 ]]]
-
-SD: no super initialize?
 
 To display the count value to the user, we will need to expose ==count== using an accessor.
 We also add two methods to increase and decrease our counter:
