@@ -114,8 +114,8 @@ see later, any object can be exposed to Amber using a <code>TDModelPresenter</co
 on the domain object.</p>
 <p>Our class has one instance variable <code>count</code>, that we initialize to <code>0</code>:</p>
 <p><figure><pre><code>MyCounter &gt;&gt; initialize
+    super initialize.
     count := 0</code></pre><figcaption></figcaption></figure></p>
-<p>SD: no super initialize?</p>
 <p>To display the count value to the user, we will need to expose <code>count</code> using an accessor.
 We also add two methods to increase and decrease our counter:</p>
 <p><figure><pre><code>MyCounter &gt;&gt; count
@@ -145,15 +145,6 @@ MyCounter &gt;&gt; increase
 <p>We now have to create an entry point with our counter presenter in the Tide server.
 To register the entry point, evaluate:</p>
 <p><figure><pre><code>MyCounter registerAt: 'my-counter'.</code></pre><figcaption></figcaption></figure></p>
-<p>SD: does it work? how to access it? localhost:5000.....
-SD: show the result
-SD: not yet. </p>
-
-
-
-<h2>4.  Stepping back</h2>
-<p>We can deduce two points from the preceding example:</p>
-<ul><li> Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot; instances of the registered class meaning that presenters are not shared between user sessions.</li><li> The entry point will have a <code>handler</code> associated with a fixed entry point  url <code>'/my-counter'</code>. When someone will query that registered url, the presenter will generate <code>JSON</code> data corresponding to its state and actions, and the handler to send it back in a response to the request.</li></ul>
 <p>If we perform a request at <code>http://localhost:5000/my-counter</code>, we get the following 
 <code>JSON</code> data back:</p>
 <p><figure><pre><code>{
@@ -166,6 +157,11 @@ SD: not yet. </p>
     &quot;count&quot;:0
   }
 }</code></pre><figcaption></figcaption></figure></p>
+
+
+<h2>4.  Stepping back</h2>
+<p>We can deduce two points from the preceding example:</p>
+<ul><li> Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot; instances of the registered class meaning that presenters are not shared between user sessions.</li><li> The entry point will have a <code>handler</code> associated with a fixed entry point  url <code>'/my-counter'</code>. When someone will query that registered url, the presenter will generate <code>JSON</code> data corresponding to its state and actions, and the handler to send it back in a response to the request.</li></ul>
 <h2>5.  The Amber application</h2>
 <p>The next step in our example is to create the Amber-side of this counter application.</p>
 <p>SD: say that amber will do it for us: 

@@ -210,11 +210,10 @@ Our class has one instance variable \ct{count}, that we initialize to \ct{0}:
 
 \begin{code}{}
 MyCounter >> initialize
+    super initialize.
     count := 0
 \end{code}
 
-
-SD: no super initialize?
 
 To display the count value to the user, we will need to expose \ct{count} using an accessor.
 We also add two methods to increase and decrease our counter:
@@ -262,17 +261,6 @@ MyCounter registerAt: 'my-counter'.
 \end{code}
 
 
-SD: does it work? how to access it? localhost:5000.....
-SD: show the result
-SD: not yet. 
-\chapter{ Stepping back}
-We can deduce two points from the preceding example:
-
-\begin{itemize}
-\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not shared between user sessions.
-\item  The entry point will have a \ct{handler} associated with a fixed entry point  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter will generate \ct{JSON} data corresponding to its state and actions, and the handler to send it back in a response to the request.
-\end{itemize}
-
 If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get the following 
 \ct{JSON} data back:
 
@@ -290,6 +278,13 @@ If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get t
 }
 \end{code}
 
+\chapter{ Stepping back}
+We can deduce two points from the preceding example:
+
+\begin{itemize}
+\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not shared between user sessions.
+\item  The entry point will have a \ct{handler} associated with a fixed entry point  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter will generate \ct{JSON} data corresponding to its state and actions, and the handler to send it back in a response to the request.
+\end{itemize}
 \chapter{ The Amber application}
 The next step in our example is to create the Amber-side of this counter application.
 

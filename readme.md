@@ -240,11 +240,10 @@ Our class has one instance variable `count`, that we initialize to `0`:
 
 
     MyCounter >> initialize
+        super initialize.
         count := 0
 
 
-
-SD: no super initialize?
 
 To display the count value to the user, we will need to expose `count` using an accessor\.
 We also add two methods to increase and decrease our counter:
@@ -305,26 +304,6 @@ To register the entry point, evaluate:
 
 
 
-SD: does it work? how to access it? localhost:5000\.\.\.\.\.
-SD: show the result
-SD: not yet\. 
-
-
-
-
-
-
-##4\.  Stepping back
-
-We can deduce two points from the preceding example:
-
-
-&nbsp;
-
-
--  Presenter classes are registered as handlers, not instances\. Tide will create "per session" instances of the registered class meaning that presenters are not shared between user sessions\.
--  The entry point will have a `handler` associated with a fixed entry point  url `'/my-counter'`\. When someone will query that registered url, the presenter will generate `JSON` data corresponding to its state and actions, and the handler to send it back in a response to the request\.
-
 If we perform a request at `http://localhost:5000/my-counter`, we get the following 
 `JSON` data back:
 
@@ -345,6 +324,21 @@ If we perform a request at `http://localhost:5000/my-counter`, we get the follow
     }
 
 
+
+
+
+
+
+##4\.  Stepping back
+
+We can deduce two points from the preceding example:
+
+
+&nbsp;
+
+
+-  Presenter classes are registered as handlers, not instances\. Tide will create "per session" instances of the registered class meaning that presenters are not shared between user sessions\.
+-  The entry point will have a `handler` associated with a fixed entry point  url `'/my-counter'`\. When someone will query that registered url, the presenter will generate `JSON` data corresponding to its state and actions, and the handler to send it back in a response to the request\.
 
 
 
