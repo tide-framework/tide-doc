@@ -1,30 +1,17 @@
 !Introduction
 
-You would like to develop advanced client side application without having to deal with the asynchronous 
-nature of Javascript. You would love to share your models between your client and your server: Tide
-is made for you.
+Have you ever wanted to develop advanced client side applications without having to deal with the asynchronous 
+nature of Javascript? Wouldn't you love to share your models between your client and your server? Then Tide
+is made for you. Tide is a client-side web framework. 
 
-SD: more Sexy intro: client side.
-
-*Tide>https://github.com/tide-framework/tide* is a web framework that allows 
-seemless communication between *Amber>http://amber-lang.net* and 
-*Pharo>http://pharo-project.org*. 
-
-Tide exposes information using the ==JSON== format. The ==JSON== is built from 
-Pharo objects and sent through the network to Amber. The ==JSON== contains data 
-exposed from objects in Pharo, but can also contain callback information 
-to perform actions from Amber to Pharo objects. Having both data and actions 
-sent to Amber makes Tide a very good communication protocol between the two 
-Smalltalks.
+*Tide>https://github.com/tide-framework/tide* offers seamless communications between *Amber>http://amber-lang.net* and 
+*Pharo>http://pharo-project.org*. Tide exchanges information using the ==JSON== format. The ==JSON== is built from 
+Pharo objects and sent through the network to Amber. The ==JSON== contains data exposed from objects in Pharo, but can also contain callback information to perform actions from Amber to Pharo objects. Having both data and actions 
+sent to Amber makes Tide a very good communication protocol between the client and server.
 
 
-SD: Add asbtract away the problem of synchronisation/concurrency of JS. 
-
-To make communication as natural as possible, the Amber layer of Tide uses 
-promises to keep the flow of callback calls sequential.
-
-This documentation aims to teach how to install and use Tide through examples, 
-as well as its architecture.
+This documentation will teach how to install and use Tide through examples.  
+We will also learn its architecture and more advanced topics.
 
 SD: What we will learn concretely.
 
@@ -93,7 +80,7 @@ Metacello new
 
 
 
-SD:Why the following is not in the troubleshooting session and bower install is not executed before?
+SD: Why the following is not in the troubleshooting session and bower install is not executed before?
 
 When this is finished, evaluate:
 
@@ -134,17 +121,29 @@ TDServer startOn: 5000. "Start the server on port 5000"
 TDServer stop. "Stop any running server"
 ]]]
 
+
+
+
+
+
+
+
+
 ! A first example: the traditional counter
 
-To get started with Tide, we will implement the traditional counter example as shown in the following figure *tideCounter*. 
-
-
-+A tide counter>file://images/tide-counter.png|label=tideCounter+
-
+To get started with Tide, we will implement the traditional counter example as shown in Figure *tideCounter*. 
 Note that Tide already includes such an example in the ==Tide-Examples== package that you can refer to.
 But better follow step by step the example.
 
-!! The presenter
+
++A tide counter>file://images/tide-counter.png|label=tideCounter|width=60+
+
+SD: picture should be cut in horizontal
+
+Developing an application in tide consists in two main elements, the presenter part developed in Pharo subclassing some Tide classes
+ and the client side developed in Amber. 
+
+!! The Pharo presenter part
 
 A counter application should contain two buttons, one to increase and the other one to
 decrease a count. It should also display the count value to the user.
@@ -240,11 +239,11 @@ We can deduce two points from the preceding example:
 - Presenter classes are registered as handlers, not instances. Tide will create "per session" instances of the registered class meaning that presenters are not shared between user sessions.
 - The entry point will have a ==handler== associated with a fixed entry point  url =='/my-counter'==. When someone will query that registered url, the presenter will generate ==JSON== data corresponding to its state and actions, and the handler to send it back in a response to the request.
 
-!! The Amber application
+!! The Amber part of the application
 
 The next step in our example is to create the Amber-side of this counter application.
 
-SD: say that amber will do it for us: 
+SD: say that Amber will do it for us: 
 We will use Amber to render an HTML view of our counter, and perform actions using proxies
 back to the counter defined in Pharo.
 
@@ -432,11 +431,7 @@ of an AJAX-friendly file upload with the ==TDFileHandler== class.
 
 
 
-
-
 ! Handling exceptions
-
-
 
 
 ! A more advanced example: 
