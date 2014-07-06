@@ -2,13 +2,13 @@
 
 Have you ever wanted to develop advanced client side applications without having to deal with the asynchronous 
 nature of Javascript? Wouldn't you love to share your models between your client and your server? Then Tide
-is made for you. Tide is a client-side web framework. 
+is made for you. Tide is a client-side web framework developed in Pharo and Amber. *Tide>https://github.com/tide-framework/tide* offers seamless communications between *Amber>http://amber-lang.net* and  *Pharo>http://pharo-project.org*.
 
-*Tide>https://github.com/tide-framework/tide* offers seamless communications between *Amber>http://amber-lang.net* and 
-*Pharo>http://pharo-project.org*. Tide exchanges information using the ==JSON== format. The ==JSON== is built from 
-Pharo objects and sent through the network to Amber. The ==JSON== contains data exposed from objects in Pharo, but can also contain callback information to perform actions from Amber to Pharo objects. Having both data and actions 
-sent to Amber makes Tide a very good communication protocol between the client and server.
 
+An application developed in Tide is composed of two parts: one part in Pharo to define what we call a presenter model and one part in Amber for the client-side widgets. Tide ensures the communication between these two parts Tide exchanges information using the ==JSON== format. The ==JSON== is built from  Pharo objects and sent through the network to Amber.Having both data and actions sent to Amber makes Tide a very good communication protocol between the client and server.
+
+But there is something fundamentally different in Tide: The ==JSON== contains data exposed from objects in Pharo, but it also contains callback information to perform actions from Amber to Pharo objects. Let us look at the implications raised. Generating JSON is trivial and used more and more as a way to replace XML. However, having operations (callbacks) describing how to interact with data is a key difference: It lets you factor out the logic of your application. You do not get just data and are forced to 
+recreate on the client-side some logic. You get fully described data, therefore it is easier to build generic and reusable client-side widgets manipulating data. 
 
 This documentation will teach how to install and use Tide through examples.  
 We will also learn its architecture and more advanced topics.
@@ -140,17 +140,14 @@ But better follow step by step the example.
 
 SD: picture should be cut in horizontal
 
-Developing an application in tide consists in two main elements, the presenter part developed in Pharo subclassing some Tide classes
+Developing an application in Tide consists in two main elements, the presenter part developed in Pharo subclassing some Tide classes
  and the client side developed in Amber. 
 
-!! The Pharo presenter part
-
-A counter application should contain two buttons, one to increase and the other one to
-decrease a count. It should also display the count value to the user.
-
-While this application might seem extremely simplistic, it already shows some of the 
+A counter application should contain two buttons, one to increase and the other one to decrease a count. It should also display the count value to the user. While this application might seem extremely simplistic, it already shows some of the 
 core principles behind Tide: Presenters and Proxies.
 
+
+!! The Pharo presenter part
 We start by creating the ==MyCounter== class in Pharo by subclassing ==TDPResenter==.
 
 [[[[
@@ -162,9 +159,9 @@ TDPresenter subclass: #MyCounter
 
 Note that not all "exposed" objects have to be subclasses of ==TDPresenter==. As we will
 see later, any object can be exposed to Amber using a ==TDModelPresenter== instance
-on the domain object.
+on the domain object. SD: we should also say that latter we will explain what is a TDPresenter.
 
-Our class has one instance variable ==count==, that we initialize to ==0==:
+Our class has one instance variable ==count== that we initialize to ==0==:
 
 [[[[
 MyCounter >> initialize
@@ -187,7 +184,7 @@ MyCounter >> decrease
 ]]]
 
 The final step we need to add the our counter is pragmas. Pragmas are 
-metadata on methods. Tide uses pragmas to expose data (called state in Tide) 
+method metadata. Tide uses pragmas to expose data (called state in Tide) 
 and callbacks (called actions) to Amber. Here's our final version of the 
 counter class:
 
@@ -206,13 +203,13 @@ MyCounter >> increase
 ]]]
 
 !! Registering applications with handlers
-
 We now have to create an entry point with our counter presenter in the Tide server.
 To register the entry point, evaluate:
 
 [[[
 MyCounter registerAt: 'my-counter'.
 ]]]
+
 
 If we perform a request at ==http://localhost:5000/my-counter==, we get the following 
 ==JSON== data back:
@@ -230,14 +227,18 @@ If we perform a request at ==http://localhost:5000/my-counter==, we get the foll
 }
 ]]]
 
+SD: how can I for example get an inspector on the MyCounter instance to increase it. So that the developer sees it live.
+
 
 
 !! Stepping back
 
-We can deduce two points from the preceding example:
+We can learn a couple of points from the preceding example:
 
 - Presenter classes are registered as handlers, not instances. Tide will create "per session" instances of the registered class meaning that presenters are not shared between user sessions.
 - The entry point will have a ==handler== associated with a fixed entry point  url =='/my-counter'==. When someone will query that registered url, the presenter will generate ==JSON== data corresponding to its state and actions, and the handler to send it back in a response to the request.
+- Sending JSON is common and trivial using a Pharo package such as NeoJSON. What is much more interesting with Tide is the fact that exchanged data is described with the operations that can be applied to it. It provides an object-oriented view on the data. You get serialized active objects and not plain dead data.
+
 
 !! The Amber part of the application
 
@@ -250,28 +251,36 @@ back to the counter defined in Pharo.
 !!! The client-side API
 
 On the client-side, root presenters exposed as handler can be accessed by creating proxies:
+SD: It is not clear that we have presenters on Pharo and Amber. We should explain that before section presenters.
 
 [[[
 myProxy := TDClientProxy on: '/my-counter'.
 ]]]
 
-Messages sent to proxies will be resolved using their ""state"" and ""actions+"" as defined on 
-the server-side.
+Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their ""state"" and ""actions+"" as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
 
-Calls to state methods are resolved locally and synchronously, because the state is passed
-over to Amber as we previously say in the JSON data.
+- Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.
 
-Calls to action methods perform requests that will result in performing the corresponding
+- Calls to action methods perform requests that will result in performing the corresponding
 method on the Pharo object asynchronously. Once the action is performed, the proxy will
 be automatically updated with possible new state and actions.
+
+
+
+!!! Handling asynchronous calls
 
 Since action calls are not synchronous, Tide proxies have a special method ==then:== used
 to perform actions only when and if the action is resolved and the proxy updated.
 
+
+Sending a message that activates a state method is synchronous as shown in the following snippet.
 [[[
 "synchronous state call"
 myProxy count. "=> 0"
+]]]
 
+Now sending a message that activates a callback is asynchronous and as such we should use the ==then:== message when we want to access the state as shown below: 
+[[[
 "async action call"
 myProxy increase; then: [
     myProxy count "=> 1" ]
@@ -303,13 +312,12 @@ MyCounterWidget >> initialize
 
 Note that =='/my-counter'== is the path to the server-side handler for our counter presenter.
 
-We can now create the rendering methods.
+We can now create the rendering methods as follows
 
 [[[
 MyCounterWidget >> render
     counter connect then: [
         self appendToJQuery: 'body' asJQuery ]
-
 
 MyCounterWidget >> renderOn: html
 	header := html h1 with: counter count asString.
@@ -328,7 +336,8 @@ MyCounterWidget >> update
 The ==render== method waits for the counter to be connected, then appends the widget to the
 ==body== element of the page (using the ==renderOn:== method).
 
-SD: why the previous part is not in the framework. Why all the user will have to define it?
+SD: why the previous part is not in the framework. Why any user will have to define it?
+SD: where is the link between appendTOJQuery and renderOn:?
 
   ==renderOn:== is a typical widget rendering method using the builtin Amber ==HTMLCanvas==.
 The ==count== message send to the ==counter== proxy will be resolved as a state accessor as
@@ -349,9 +358,16 @@ MyCounterWidget >> decrease
 	self counter then: [ self update ]
 ]]]
 
+SD: we also miss counter. is it a method that we should define?
+
+
 Here's a screenshot of the final counter application:
 
 +file://images/tide-counter.png+
+
+
+
+
 
 ! Actions
 
@@ -394,7 +410,7 @@ myCounter then: [ myCounter count ]. "=> -8"
 
 ! Presenters
 
-Tide tries to make it easy to create presenters on domain objects.
+Tide makes it easy to create presenters on domain objects.
 
 !! Root presenters
 
