@@ -380,7 +380,39 @@ What we haven't discussed yet is how action callbacks in Tide can pass arguments
 
 !!! Literals
 
+Literal objects can be send as arguments to Tide actions. They will be converted to JSON and back in
+Pharo. Any literal that can be serialized to JSON can be send as an argument:
+
+- Numbers
+- Booleans
+- Strings
+- Dictionaries
+- Arrays (and OrderedCollections)
+
+As an example, we can improve the counter to be able to increase it by any number instead of one:
+
+[[[
+MyCounter >> increaseBy: anInteger
+    <action>
+    count := count + anInteger
+]]]
+
+On the Amber side, we can change the ==increase== method to increase the counter by 8:
+
+[[[
+MyCounterWidget >> increase
+    self counter increaseBy: 8; then: [
+        self update ]
+]]]
+
 !!! References
+
+While sending literals from Amber to Pharo is definitely useful and convenient, it is barely enough for more
+complicated scenarios, where more complex objects have to be sent as arguments.
+
+To manage this use case, Tide allows references to presenters to be used as action arguments too. 
+This means that any presenter proxy in Amber can be used as an argument to an action argument, and 
+that identity will be preserved on the Pharo side when the action message will be sent.
 
 !! Chaining actions
 
@@ -406,15 +438,29 @@ myCounter then: [ myCounter count ]. "=> 2"
 myCounter then: [ myCounter count ]. "=> -8"
 ]]]
 
-
-
 ! Presenters
 
 Tide makes it easy to create presenters on domain objects.
 
 !! Root presenters
 
+In any Tide application, some presenters must be always accessible at a fixed url. They are called 
+in Tide terminology root presenters. Root presenters are the entry points of Tide application.
+
+We already saw one root presenter, the ==MyCounter== class.
+
+To register a presenter class, use ==TDPresenter>>registerAt:==. Tide will register the presenter 
+class with the corresponding path and create instances per session.
+
+Note that only one instance of registered root presenter class will be created per session. This 
+ensures that all actions will be performed on the same object.
+
+
 !! Answering new presenters from action callbacks
+
+!!! A note about security
+
+
 
 !! Builtin presenter classes
 
