@@ -590,15 +590,26 @@ ensures that all actions will be performed on the same object\.
 
 ###9\.  Answering new presenters from action callbacks
 
+One important aspect of Tide presenters is the ability to answer new presenters from action methods\.
+From one root presenters several other presenters are accessed by reachability\.
+
+NP: to be continued
+
 
 
 ####9\.1\.  A note about security
 
 
 
-
-
 ###10\.  Builtin presenter classes
+
+Tide contains convenient presenter classes builtin\. Builtin presenter classes can be divided into 
+two categories:
+
+&nbsp;
+
+-  base presenters \(literal and collection presenters\)
+-  model presenters
 
 
 

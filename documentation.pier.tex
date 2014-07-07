@@ -452,7 +452,20 @@ class with the corresponding path and create instances per session.
 
 Note that only one instance of registered root presenter class will be created per session. This 
 ensures that all actions will be performed on the same object.
-\section{ Answering new presenters from action callbacks}\subsection{ A note about security}\section{ Builtin presenter classes}\section{ Custom presenters}\section{ Presenters and security}\chapter{ Managing sessions}\chapter{ Handlers}
+\section{ Answering new presenters from action callbacks}
+One important aspect of Tide presenters is the ability to answer new presenters from action methods.
+From one root presenters several other presenters are accessed by reachability.
+
+NP: to be continued
+\subsection{ A note about security}\section{ Builtin presenter classes}
+Tide contains convenient presenter classes builtin. Builtin presenter classes can be divided into 
+two categories:
+
+\begin{itemize}
+\item  base presenters (literal and collection presenters)
+\item  model presenters
+\end{itemize}
+\section{ Custom presenters}\section{ Presenters and security}\chapter{ Managing sessions}\chapter{ Handlers}
 \begin{todo}
 
 should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.
