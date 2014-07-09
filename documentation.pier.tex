@@ -1,4 +1,14 @@
-\documentclass[a4paper,10pt,twoside]{book}\usepackage{graphicx}\usepackage[normalem]{ulem}\newcommand{\ct}[1]}\usepackage{listings}\lstnewenvironment{code}[1]{%	\lstset{%		% frame=lines,		frame=single,		framerule=0pt,		mathescape=false	}}{}\lstnewenvironment{script}[2][defaultlabel]{%\renewcommand{\lstlistingname}{Script}%	\lstset{		% frame=lines,		frame=single,		framerule=0pt,		mathescape=false,		name={Script},		caption={\emph{#2}},		label={scr:#1}	}}{}\usepackage{fixltx2e}\usepackage[	colorlinks=true,	linkcolor=black,	urlcolor=black,	citecolor=black]{hyperref}\begin{document}\chapter{Introduction}
+\documentclass[a4paper,10pt,twoside]{book}\usepackage{graphicx}\usepackage[normalem]{ulem}\newcommand{\ct}[1]}\usepackage{listings}\lstnewenvironment{code}[1]{%	\lstset{%		% frame=lines,		frame=single,		framerule=0pt,		mathescape=false	}}{}\lstnewenvironment{script}[2][defaultlabel]{%\renewcommand{\lstlistingname}{Script}%	\lstset{		% frame=lines,		frame=single,		framerule=0pt,		mathescape=false,		name={Script},		caption={\emph{#2}},		label={scr:#1}	}}{}\usepackage{fixltx2e}\usepackage[	colorlinks=true,	linkcolor=black,	urlcolor=black,	citecolor=black]{hyperref}\begin{document}
+\begin{todo}
+
+I need to make it clear that presenters are on the Pharo side only and Proxies in Amber.
+\end{todo}
+
+\begin{todo}
+
+explain what are state and actions
+\end{todo}
+\chapter{Introduction}
 Have you ever wanted to develop advanced client side applications without having to deal with the asynchronous 
 nature of Javascript? Wouldn't you love to share your models between your client and your server? Then Tide
 is made for you. Tide is a client-side web framework developed in Pharo and Amber. \href{https://github.com/tide-framework/tide}{Tide} offers seamless communications between \href{http://amber-lang.net}{Amber} and  \href{http://pharo-project.org}{Pharo}.
@@ -46,21 +56,34 @@ $ ./pharo-ui Pharo.image
 \end{code}
 
 \subsubsection{ Preparing the Pharo image}
-SD: We can also do it from the command line and it would be good to show how. 
-SD:Would be good to have one release of tide 
+\begin{todo}
+
+We can also do it from the command line and it would be good to show how. 
+\end{todo}
+
+\begin{todo}
+
+Would be good to have one release of tide 
+\end{todo}
+
 to avoid development. 
 
 \begin{todo}
 
-use the pharo cli with the \sout{config option to load tide.
+use the pharo cli with the config option to load tide.
+\end{todo}
 
 Once you get the Pharo window open, you have to install the Tide backend part. 
 This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.
 
-- Click on the background of the Pharo window
-- In the World menu that appears, click on \ct{Workspace}
-- In that window, evaluate: (you type the thing, select the text and then right 
+\begin{itemize}
+\item  Click on the background of the Pharo window
+\item  In the World menu that appears, click on \ct{Workspace}
+\item  In that window, evaluate: (you type the thing, select the text and then right 
+\end{itemize}
+
   click and select \symbol{34}Do It\symbol{34} from the menu).
+
 
 \begin{code}{}
 Metacello new
@@ -73,50 +96,62 @@ Metacello new
 
 SD: Why the following is not in the troubleshooting session and bower install is not executed before?
 
-@@todo we should have a simpler way to install it.
+\begin{todo}
+
+we should have a simpler way to install it.
+\end{todo}
 
 When this is finished, evaluate:
 
-{[}{[}{[}
+
+\begin{code}{}
 TDDispatcher tideIndexPageUrl inspect
-{]}{]}{]}
+\end{code}
+
 
 When first executed, you will get an error saying you must execute bower 
 install in a particular directory. Open a terminal, change to the right 
 directory, and execute:
 
-{[}{[}{[}
-\$ bower install
-{]}{]}{]}
+
+\begin{code}{}
+$ bower install
+\end{code}
+
 
 Back in the Pharo window, close the error message and evaluate the same instruction 
 again:
 
-{[}{[}{[}
+
+\begin{code}{}
 TDDispatcher tideIndexPageUrl inspect
-{]}{]}{]}
+\end{code}
+
 
 This should give you the URL at which your web browser should be pointed to. 
 Now copy this URL, open your web browser and paste it in the browser's address bar.
-
-
-!!! Starting the server
-
-The ==TDServer== class provides a convenient way to start$/$stop a Tide server, using
+\subsection{ Starting the server}
+The \ct{TDServer} class provides a convenient way to start$/$stop a Tide server, using
 Zinc behind the scenes:
 
-{[}{[}{[}
-TDServer startOn: 5000. \symbol{34}Start the server on port 5000\symbol{34}
-TDServer stop. \symbol{34}Stop any running server\symbol{34}
-{]}{]}{]}
 
-! A first example: the traditional counter
+\begin{code}{}
+TDServer startOn: 5000. "Start the server on port 5000"
+TDServer stop. "Stop any running server"
+\end{code}
 
-To get started with Tide, we will implement the traditional counter example as shown in Figure *tideCounter*. 
-Note that Tide already includes such an example in the ==Tide-Examples== package that you can refer to.
+\chapter{ A first example: the traditional counter}
+To get started with Tide, we will implement the traditional counter example as shown in Figure \ref{tideCounter}. 
+Note that Tide already includes such an example in the \ct{Tide-Examples} package that you can refer to.
 But better follow step by step the example.
 
-+A tide counter$>$file:$/$$/$images$/$tide-counter.png\textbar{}label=tideCounter+
+
+\begin{figure}
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{images/tide-counter.png}\caption{A tide counter.\label{tideCounter}}\end{center}
+\end{figure}
+
 
 SD: picture should be cut in horizontal
 
@@ -125,203 +160,223 @@ Developing an application in Tide consists in two main elements, the presenter p
 
 A counter application should contain two buttons, one to increase and the other one to decrease a count. It should also display the count value to the user. While this application might seem extremely simplistic, it already shows some of the 
 core principles behind Tide: Presenters and Proxies.
+\section{ The Pharo presenter part}
+We start by creating the \ct{MyCounter} class in Pharo by subclassing \ct{TDPResenter}.
 
 
-!! The Pharo presenter part
-We start by creating the ==MyCounter== class in Pharo by subclassing ==TDPResenter==.
-
-{[}{[}{[}{[}
-TDPresenter subclass: \#MyCounter
+\begin{code}{}
+TDPresenter subclass: #MyCounter
 	instanceVariableNames: 'count'
 	classVariableNames: ''
 	category: 'MyCounter'
-{]}{]}{]}
+\end{code}
 
-Note that not all \symbol{34}exposed\symbol{34} objects have to be subclasses of ==TDPresenter==. As we will
-see later, any object can be exposed to Amber using a ==TDModelPresenter== instance
-on the domain object. SD: we should also say that latter we will explain what is a TDPresenter.
 
-Our class has one instance variable ==count== that we initialize to ==0==:
+Note that not all \symbol{34}exposed\symbol{34} objects have to be subclasses of \ct{TDPresenter}. As we will
+see later, any object can be exposed to Amber using a \ct{TDModelPresenter} instance
+on the domain object. \ct{TDPresenter} is the root class of the presenter hierarchy. We will
+in \ref{presenters}.
 
-{[}{[}{[}{[}
-MyCounter $>$$>$ initialize
+Our class has one instance variable \ct{count} that we initialize to \ct{0}:
+
+
+\begin{code}{}
+MyCounter >> initialize
     super initialize.
     count := 0
-{]}{]}{]}
+\end{code}
 
-To display the count value to the user, we will need to expose ==count== using an accessor.
+
+To display the count value to the user, we will need to expose \ct{count} using an accessor.
 We also add two methods to increase and decrease our counter:
 
-{[}{[}{[}
-MyCounter $>$$>$ count
-    $\uparrow$ count
 
-MyCounter $>$$>$ increase
+\begin{code}{}
+MyCounter >> count
+    ^ count
+
+MyCounter >> increase
     count := count + 1
 
-MyCounter $>$$>$ decrease
+MyCounter >> decrease
     count := count - 1
-{]}{]}{]}
+\end{code}
+
 
 The final step we need to add the our counter is pragmas. Pragmas are 
 method metadata. Tide uses pragmas to expose data (called state in Tide) 
 and callbacks (called actions) to Amber. Here's our final version of the 
 counter class:
 
-{[}{[}{[}
-MyCounter $>$$>$ count
-    $<$state$>$
-    $\uparrow$ count
 
-MyCounter $>$$>$ increase
-    $<$action$>$
+\begin{code}{}
+MyCounter >> count
+    <state>
+    ^ count
+
+MyCounter >> increase
+    <action>
     count := count + 1
 
-MyCounter $>$$>$ increase
-    $<$action$>$
+MyCounter >> increase
+    <action>
     count := count - 1
-{]}{]}{]}
+\end{code}
 
-!! Registering applications with handlers
+\section{ Registering applications with handlers}
 We now have to create an entry point with our counter presenter in the Tide server.
 To register the entry point, evaluate:
 
-{[}{[}{[}
+
+\begin{code}{}
 MyCounter registerAt: 'my-counter'.
-{]}{]}{]}
+\end{code}
 
 
-If we perform a request at ==http:$/$$/$localhost:5000$/$my-counter==, we get the following 
-==JSON== data back:
-
-{[}{[}{[}
-\{
-  \symbol{34}\_\_id\_\_\symbol{34}:\symbol{34}bwv8m74bhgzmv0dgvzptuy4py\symbol{34},
-  \symbol{34}actions\symbol{34}:\{
-    \symbol{34}increase\symbol{34}:\symbol{34}$/$my-counter?\_callback=359446426\symbol{34},
-    \symbol{34}decrease\symbol{34}:\symbol{34}$/$my-counter?\_callback=523483752\symbol{34}
-  \},
-  \symbol{34}state\symbol{34}:\{
-    \symbol{34}count\symbol{34}:0
-  \}
-\}
-{]}{]}{]}
-
-SD: how can I for example get an inspector on the MyCounter instance to increase it. So that the developer sees it live.
+If we perform a request at \ct{http:$/$$/$localhost:5000$/$my-counter}, we get the following 
+\ct{JSON} data back:
 
 
+\begin{code}{}
+{
+  "__id__":"bwv8m74bhgzmv0dgvzptuy4py",
+  "actions":{
+    "increase":"/my-counter?_callback=359446426",
+    "decrease":"/my-counter?_callback=523483752"
+  },
+  "state":{
+    "count":0
+  }
+}
+\end{code}
 
-!! Stepping back
-
+\section{ Stepping back}
 We can learn a couple of points from the preceding example:
 
-- Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not shared between user sessions.
-- The entry point will have a ==handler== associated with a fixed entry point  url =='$/$my-counter'==. When someone will query that registered url, the presenter will generate ==JSON== data corresponding to its state and actions, and the handler to send it back in a response to the request.
-- Sending JSON is common and trivial using a Pharo package such as NeoJSON. What is much more interesting with Tide is the fact that exchanged data is described with the operations that can be applied to it. It provides an object-oriented view on the data. You get serialized active objects and not plain dead data.
-
-
-!! The Amber part of the application
-
+\begin{itemize}
+\item  Presenter classes are registered as handlers, not instances. Tide will create \symbol{34}per session\symbol{34} instances of the registered class meaning that presenters are not shared between user sessions.
+\item  The entry point will have a \ct{handler} associated with a fixed entry point  url \ct{'$/$my-counter'}. When someone will query that registered url, the presenter will generate \ct{JSON} data corresponding to its state and actions, and the handler to send it back in a response to the request.
+\item  Sending JSON is common and trivial using a Pharo package such as NeoJSON. What is much more interesting with Tide is the fact that exchanged data is described with the operations that can be applied to it. It provides an object-oriented view on the data. You get serialized active objects and not plain dead data.
+\end{itemize}
+\section{ The Amber part of the application}
 The next step in our example is to create the Amber-side of this counter application.
 
-SD: say that Amber will do it for us: 
-We will use Amber to render an HTML view of our counter, and perform actions using proxies
-back to the counter defined in Pharo.
-
-!!! The client-side API
-
+We will use Amber to render an HTML widget of our counter, and perform actions using Tide proxies of the Pharo counter.
+\subsection{ The client-side API}
 On the client-side, root presenters exposed as handler can be accessed by creating proxies:
-SD: It is not clear that we have presenters on Pharo and Amber. We should explain that before section presenters.
 
-{[}{[}{[}
-myProxy := TDClientProxy on: '$/$my-counter'.
-{]}{]}{]}
 
-Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their \symbol{34}\symbol{34}state\symbol{34}\symbol{34} and \symbol{34}\symbol{34}actions\symbol{34}\symbol{34} as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
+\begin{code}{}
+myProxy := TDClientProxy on: '/my-counter'.
+\end{code}
 
-- Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.
 
-- Calls to action methods perform requests that will result in performing the corresponding
+Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their \textbf{state} and \textbf{actions} as defined on the server-side.
+
+\begin{itemize}
+\item  Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.
+\end{itemize}
+
+\begin{itemize}
+\item  Calls to action methods perform requests that will result in performing the corresponding
+\end{itemize}
+
 method on the Pharo object asynchronously. Once the action is performed, the proxy will
 be automatically updated with possible new state and actions.
 
+\begin{todo}
 
-
-!!! Handling asynchronous calls
-
-Since action calls are not synchronous, Tide proxies have a special method ==then:== used
+have a convention for state vs actions. Have a discussion about how to name action methods and state methods. The developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
+\end{todo}
+\subsection{ Handling asynchronous calls}
+Since action calls are not synchronous, Tide proxies have a special method \ct{then:} used
 to perform actions only when and if the action is resolved and the proxy updated.
 
-
 Sending a message that activates a state method is synchronous as shown in the following snippet.
-{[}{[}{[}
-\symbol{34}synchronous state call\symbol{34}
-myProxy count. \symbol{34}=$>$ 0\symbol{34}
-{]}{]}{]}
 
-Now sending a message that activates a callback is asynchronous and as such we should use the ==then:== message when we want to access the state as shown below: 
-{[}{[}{[}
-\symbol{34}async action call\symbol{34}
-myProxy increase; then: {[}
-    myProxy count \symbol{34}=$>$ 1\symbol{34} {]}
-{]}{]}{]}
+\begin{code}{}
+"synchronous state call"
+myProxy count. "=> 0"
+\end{code}
 
-SD: the developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
 
-!!! The widget class
+Now sending a message that activates a callback is asynchronous and as such we should use the \ct{then:} message when we want to access the state as shown below: 
 
-In Amber's IDE, create a new class ==MyCounterWidget==. 
+\begin{code}{}
+"async action call"
+myProxy increase; then: [
+    myProxy count "=> 1" ]
+\end{code}
 
-{[}{[}{[}
-Widget subclass: \#MyCounterWidget
+\subsection{ The widget class}
+In Amber's IDE, create a new class \ct{MyCounterWidget}. 
+
+
+\begin{code}{}
+Widget subclass: #MyCounterWidget
 	instanceVariableNames: 'counter header'
 	package: 'Tide-Amber-Examples'
-{]}{]}{]}
+\end{code}
 
-The widget class has two instance variables: ==counter==, which holds a proxy over the 
-Pharo counter object, and ==header== which  holds a reference on the header tag brush to
+
+The widget class has two instance variables: \ct{counter}, which holds a proxy over the 
+Pharo counter object, and \ct{header} which  holds a reference on the header tag brush to
 update the UI.
 
 To initialize our counter widget, we connect it to the Pharo counter presenter as follows:
 
-{[}{[}{[}
-MyCounterWidget $>$$>$ initialize
-    super initialize.
-    counter := TDClientProxy on: '$/$my-counter'
-{]}{]}{]}
 
-Note that =='$/$my-counter'== is the path to the server-side handler for our counter presenter.
+\begin{code}{}
+MyCounterWidget >> initialize
+    super initialize.
+    counter := TDClientProxy on: '/my-counter'
+\end{code}
+
+
+Note that \ct{'$/$my-counter'} is the path to the server-side handler for our counter presenter.
 
 We can now create the rendering methods as follows
 
-{[}{[}{[}
-MyCounterWidget $>$$>$ render
-    counter connect then: {[}
-        self appendToJQuery: 'body' asJQuery {]}
+\begin{todo}
 
-MyCounterWidget $>$$>$ renderOn: html
+explain \#connect
+\end{todo}
+
+\begin{todo}
+
+explain \#appendToJQuery, explain that it renders the widget and calls \#renderOn:
+\end{todo}
+
+\begin{todo}
+
+show renderOn: before and explain the connect and appendToJQuery after that.
+\end{todo}
+
+
+\begin{code}{}
+MyCounterWidget >> render
+    counter connect then: [
+        self appendToJQuery: 'body' asJQuery ]
+
+MyCounterWidget >> renderOn: html
 	header := html h1 with: counter count asString.
 	html button 
 		with: '++';
-		onClick: {[} self increase {]}.
+		onClick: [ self increase ].
 	html button 
-		with: '}';
-\end{todo}
+		with: '--';
+		onClick: [ self decrease ]
 
-		onClick: {[} self decrease {]}
+MyCounterWidget >> update
+	header contents: [ :html |
+		html with: counter count asString ]
+\end{code}
 
-MyCounterWidget $>$$>$ update
-	header contents: {[} :html \textbar{}
-		html with: counter count asString {]}
-{]}{]}{]}
 
 The \ct{render} method waits for the counter to be connected, then appends the widget to the
 \ct{body} element of the page (using the \ct{renderOn:} method).
 
-SD: why the previous part is not in the framework. Why any user will have to define it?
-SD: where is the link between appendTOJQuery and renderOn:?
-
-  \ct{renderOn:} is a typical widget rendering method using the builtin Amber \ct{HTMLCanvas}.
+\ct{renderOn:} is a typical widget rendering method using the builtin Amber \ct{HTMLCanvas}.
 The \ct{count} message send to the \ct{counter} proxy will be resolved as a state accessor as
 defined on the server-side.
 
@@ -333,16 +388,14 @@ We still miss two methods to actually increase and decrease our counter:
 
 \begin{code}{}
 MyCounterWidget >> increase
-	self counter increase.
-	self counter then: [ self update ]
+	counter increase.
+	counter then: [ self update ]
 
 MyCounterWidget >> decrease
-	self counter decrease.
-	self counter then: [ self update ]
+	counter decrease.
+	counter then: [ self update ]
 \end{code}
 
-
-SD: we also miss counter. is it a method that we should define?
 
 Here's a screenshot of the final counter application:
 
@@ -353,6 +406,11 @@ Here's a screenshot of the final counter application:
 \includegraphics[width=1.0\textwidth]{images/tide-counter.png}\caption{file:$/$$/$images$/$tide-counter.png.\label{images/tide-counter.png}}\end{center}
 \end{figure}
 
+
+\begin{todo}
+
+show the url of the application and show another state of the counter
+\end{todo}
 \chapter{ Actions}
 We have seen in a nutshell in the previous sections how Tide actions work. They allow callbacks
 to be performed from Amber to Pharo objects.
@@ -401,10 +459,12 @@ Tide actions can be easily chained without breaking the sequential flow of the a
 using promises. This is an important property of action callbacks, because all requests done in 
 the client must be asynchronous, quickly leading to \symbol{34}spaghetti callbacks\symbol{34} code.
 
-SD: here we should have a JS example of async and show how we can express it in tide. 
+\begin{todo}
+
+here we should have a JS example of async and show how we can express it in tide. 
+\end{todo}
 \subsection{ Back to the counter example}
 The following code snippet shows how \ct{increase} calls to our counter are chained.
-SD: using \ct{then:}
 
 
 \begin{code}{}
@@ -417,7 +477,12 @@ myCounter then: [ myCounter count ]. "=> 2"
 myCounter then: [ myCounter count ]. "=> -8"
 \end{code}
 
-\chapter{ Presenters}
+
+\begin{todo:}
+
+explain here the state vs action and async nature of actions
+\end{todo:}
+\chapter{ Presenters}\label{presenters}
 Tide makes it easy to create presenters on domain objects.
 \section{ Root presenters}
 In any Tide application, some presenters must be always accessible at a fixed url. They are called 
@@ -431,6 +496,11 @@ class with the corresponding path and create instances per session.
 Note that only one instance of registered root presenter class will be created per session. This 
 ensures that all actions will be performed on the same object.
 \section{ Answering new presenters from action callbacks}
+\begin{todo}
+
+explain that if the action doesn't have an explicit return, it will update the proxy
+\end{todo}
+
 One important aspect of Tide presenters is the ability to answer new presenters from action methods.
 From one root presenters several other presenters are accessed by reachability, allowing you to define
 the flow of your application from one root presenter.

@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">  <head>    <title>{Tide}</title>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" rel="stylesheet">    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>    <!--[if lt IE 9]>      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>    <![endif]-->  </head>  <body>    <div class="container">      <h2>Introduction</h2>
+<!DOCTYPE html><html lang="en">  <head>    <title>{Tide}</title>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" rel="stylesheet">    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>    <!--[if lt IE 9]>      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>    <![endif]-->  </head>  <body>    <div class="container">      <p class="todo">I need to make it clear that presenters are on the Pharo side only and Proxies in Amber.</p><p class="todo">explain what are state and actions</p>
+<h2>Introduction</h2>
 <p>Have you ever wanted to develop advanced client side applications without having to deal with the asynchronous 
 nature of Javascript? Wouldn't you love to share your models between your client and your server? Then Tide
 is made for you. Tide is a client-side web framework developed in Pharo and Amber. <a href="https://github.com/tide-framework/tide">Tide</a> offers seamless communications between <a href="http://amber-lang.net">Amber</a> and  <a href="http://pharo-project.org">Pharo</a>.</p>
@@ -30,123 +31,74 @@ following:</p>
 <p>To start the Pharo image, evaluate:</p>
 <p><figure><pre><code class="smalltalk">$ ./pharo-ui Pharo.image</code></pre><figcaption></figcaption></figure></p>
 <h5>1.3.1.  Preparing the Pharo image</h5>
-<p>SD: We can also do it from the command line and it would be good to show how. 
-SD:Would be good to have one release of tide 
-to avoid development. </p>
-<p class="todo">use the pharo cli with the <s>config option to load tide.
-
-Once you get the Pharo window open, you have to install the Tide backend part. 
-This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.
-
-- Click on the background of the Pharo window
-- In the World menu that appears, click on <code>Workspace</code>
-- In that window, evaluate: (you type the thing, select the text and then right 
-  click and select &quot;Do It&quot; from the menu).
-<figure><pre><code class="smalltalk">Metacello new
+<p class="todo">We can also do it from the command line and it would be good to show how. </p><p class="todo">Would be good to have one release of tide </p><p>to avoid development. </p>
+<p class="todo">use the pharo cli with the config option to load tide.</p>
+<p>Once you get the Pharo window open, you have to install the Tide backend part. 
+This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.</p>
+<ul><li> Click on the background of the Pharo window</li><li> In the World menu that appears, click on <code>Workspace</code></li><li> In that window, evaluate: (you type the thing, select the text and then right </li></ul><p>  click and select &quot;Do It&quot; from the menu).</p>
+<p><figure><pre><code class="smalltalk">Metacello new
   configuration: 'Tide';
   version: #development;
   repository: 'http://www.smalltalkhub.com/mc/Pharo/MetaRepoForPharo30/main';
-  load.</code></pre><figcaption></figcaption></figure>
-
-SD: Why the following is not in the troubleshooting session and bower install is not executed before?
-
-@@todo we should have a simpler way to install it.
-
-When this is finished, evaluate:
-
-[[[
-TDDispatcher tideIndexPageUrl inspect
-]]]
-
-When first executed, you will get an error saying you must execute bower 
+  load.</code></pre><figcaption></figcaption></figure></p>
+<p>SD: Why the following is not in the troubleshooting session and bower install is not executed before?</p>
+<p class="todo">we should have a simpler way to install it.</p>
+<p>When this is finished, evaluate:</p>
+<p><figure><pre><code class="smalltalk">TDDispatcher tideIndexPageUrl inspect</code></pre><figcaption></figcaption></figure></p>
+<p>When first executed, you will get an error saying you must execute bower 
 install in a particular directory. Open a terminal, change to the right 
-directory, and execute:
+directory, and execute:</p>
+<p><figure><pre><code class="smalltalk">$ bower install</code></pre><figcaption></figcaption></figure></p>
+<p>Back in the Pharo window, close the error message and evaluate the same instruction 
+again:</p>
+<p><figure><pre><code class="smalltalk">TDDispatcher tideIndexPageUrl inspect</code></pre><figcaption></figcaption></figure></p>
+<p>This should give you the URL at which your web browser should be pointed to. 
+Now copy this URL, open your web browser and paste it in the browser's address bar.</p>
 
-[[[
-$ bower install
-]]]
+<h4>1.4.  Starting the server</h4>
+<p>The <code>TDServer</code> class provides a convenient way to start/stop a Tide server, using
+Zinc behind the scenes:</p>
+<p><figure><pre><code class="smalltalk">TDServer startOn: 5000. &quot;Start the server on port 5000&quot;
+TDServer stop. &quot;Stop any running server&quot;</code></pre><figcaption></figcaption></figure></p>
+<h2> A first example: the traditional counter</h2>
+<p>To get started with Tide, we will implement the traditional counter example as shown in Figure <a href="#tideCounter">1.1</a>. 
+Note that Tide already includes such an example in the <code>Tide-Examples</code> package that you can refer to.
+But better follow step by step the example.</p>
+<p><a name="tideCounter"></a><figure><img src="images/tide-counter.png"></img><figcaption>1.1. A tide counter</figcaption></figure></p>
+<p>SD: picture should be cut in horizontal</p>
+<p>Developing an application in Tide consists in two main elements, the presenter part developed in Pharo subclassing some Tide classes
+ and the client side developed in Amber. </p>
+<p>A counter application should contain two buttons, one to increase and the other one to decrease a count. It should also display the count value to the user. While this application might seem extremely simplistic, it already shows some of the 
+core principles behind Tide: Presenters and Proxies.</p>
 
-Back in the Pharo window, close the error message and evaluate the same instruction 
-again:
-
-[[[
-TDDispatcher tideIndexPageUrl inspect
-]]]
-
-This should give you the URL at which your web browser should be pointed to. 
-Now copy this URL, open your web browser and paste it in the browser's address bar.
-
-
-!!! Starting the server
-
-The ==TDServer== class provides a convenient way to start/stop a Tide server, using
-Zinc behind the scenes:
-
-[[[
-TDServer startOn: 5000. &quot;Start the server on port 5000&quot;
-TDServer stop. &quot;Stop any running server&quot;
-]]]
-
-! A first example: the traditional counter
-
-To get started with Tide, we will implement the traditional counter example as shown in Figure *tideCounter*. 
-Note that Tide already includes such an example in the ==Tide-Examples== package that you can refer to.
-But better follow step by step the example.
-
-+A tide counter&gt;file://images/tide-counter.png|label=tideCounter+
-
-SD: picture should be cut in horizontal
-
-Developing an application in Tide consists in two main elements, the presenter part developed in Pharo subclassing some Tide classes
- and the client side developed in Amber. 
-
-A counter application should contain two buttons, one to increase and the other one to decrease a count. It should also display the count value to the user. While this application might seem extremely simplistic, it already shows some of the 
-core principles behind Tide: Presenters and Proxies.
-
-
-!! The Pharo presenter part
-We start by creating the ==MyCounter== class in Pharo by subclassing ==TDPResenter==.
-
-[[[[
-TDPresenter subclass: #MyCounter
+<h3>2.  The Pharo presenter part</h3><p>We start by creating the <code>MyCounter</code> class in Pharo by subclassing <code>TDPResenter</code>.</p>
+<p><figure><pre><code class="smalltalk">TDPresenter subclass: #MyCounter
 	instanceVariableNames: 'count'
 	classVariableNames: ''
-	category: 'MyCounter'
-]]]
-
-Note that not all &quot;exposed&quot; objects have to be subclasses of ==TDPresenter==. As we will
-see later, any object can be exposed to Amber using a ==TDModelPresenter== instance
-on the domain object. SD: we should also say that latter we will explain what is a TDPresenter.
-
-Our class has one instance variable ==count== that we initialize to ==0==:
-
-[[[[
-MyCounter &gt;&gt; initialize
+	category: 'MyCounter'</code></pre><figcaption></figcaption></figure></p>
+<p>Note that not all &quot;exposed&quot; objects have to be subclasses of <code>TDPresenter</code>. As we will
+see later, any object can be exposed to Amber using a <code>TDModelPresenter</code> instance
+on the domain object. <code>TDPresenter</code> is the root class of the presenter hierarchy. We will
+in <a href="#presenters">7.1</a>.</p>
+<p>Our class has one instance variable <code>count</code> that we initialize to <code>0</code>:</p>
+<p><figure><pre><code class="smalltalk">MyCounter &gt;&gt; initialize
     super initialize.
-    count := 0
-]]]
-
-To display the count value to the user, we will need to expose ==count== using an accessor.
-We also add two methods to increase and decrease our counter:
-
-[[[
-MyCounter &gt;&gt; count
+    count := 0</code></pre><figcaption></figcaption></figure></p>
+<p>To display the count value to the user, we will need to expose <code>count</code> using an accessor.
+We also add two methods to increase and decrease our counter:</p>
+<p><figure><pre><code class="smalltalk">MyCounter &gt;&gt; count
     ^ count
 
 MyCounter &gt;&gt; increase
     count := count + 1
 
 MyCounter &gt;&gt; decrease
-    count := count - 1
-]]]
-
-The final step we need to add the our counter is pragmas. Pragmas are 
+    count := count - 1</code></pre><figcaption></figcaption></figure></p>
+<p>The final step we need to add the our counter is pragmas. Pragmas are 
 method metadata. Tide uses pragmas to expose data (called state in Tide) 
 and callbacks (called actions) to Amber. Here's our final version of the 
-counter class:
-
-[[[
-MyCounter &gt;&gt; count
+counter class:</p>
+<p><figure><pre><code class="smalltalk">MyCounter &gt;&gt; count
     &lt;state&gt;
     ^ count
 
@@ -156,23 +108,14 @@ MyCounter &gt;&gt; increase
 
 MyCounter &gt;&gt; increase
     &lt;action&gt;
-    count := count - 1
-]]]
+    count := count - 1</code></pre><figcaption></figcaption></figure></p>
+<h3>3.  Registering applications with handlers</h3><p>We now have to create an entry point with our counter presenter in the Tide server.
+To register the entry point, evaluate:</p>
+<p><figure><pre><code class="smalltalk">MyCounter registerAt: 'my-counter'.</code></pre><figcaption></figcaption></figure></p>
 
-!! Registering applications with handlers
-We now have to create an entry point with our counter presenter in the Tide server.
-To register the entry point, evaluate:
-
-[[[
-MyCounter registerAt: 'my-counter'.
-]]]
-
-
-If we perform a request at ==http://localhost:5000/my-counter==, we get the following 
-==JSON== data back:
-
-[[[
-{
+<p>If we perform a request at <code>http://localhost:5000/my-counter</code>, we get the following 
+<code>JSON</code> data back:</p>
+<p><figure><pre><code class="smalltalk">{
   &quot;__id__&quot;:&quot;bwv8m74bhgzmv0dgvzptuy4py&quot;,
   &quot;actions&quot;:{
     &quot;increase&quot;:&quot;/my-counter?_callback=359446426&quot;,
@@ -181,98 +124,52 @@ If we perform a request at ==http://localhost:5000/my-counter==, we get the foll
   &quot;state&quot;:{
     &quot;count&quot;:0
   }
-}
-]]]
+}</code></pre><figcaption></figcaption></figure></p>
 
-SD: how can I for example get an inspector on the MyCounter instance to increase it. So that the developer sees it live.
+<h3>4.  Stepping back</h3>
+<p>We can learn a couple of points from the preceding example:</p>
+<ul><li> Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot; instances of the registered class meaning that presenters are not shared between user sessions.</li><li> The entry point will have a <code>handler</code> associated with a fixed entry point  url <code>'/my-counter'</code>. When someone will query that registered url, the presenter will generate <code>JSON</code> data corresponding to its state and actions, and the handler to send it back in a response to the request.</li><li> Sending JSON is common and trivial using a Pharo package such as NeoJSON. What is much more interesting with Tide is the fact that exchanged data is described with the operations that can be applied to it. It provides an object-oriented view on the data. You get serialized active objects and not plain dead data.</li></ul>
 
+<h3>5.  The Amber part of the application</h3>
+<p>The next step in our example is to create the Amber-side of this counter application.</p>
+<p>We will use Amber to render an HTML widget of our counter, and perform actions using Tide proxies of the Pharo counter.</p>
+<h4>5.1.  The client-side API</h4>
+<p>On the client-side, root presenters exposed as handler can be accessed by creating proxies:</p>
+<p><figure><pre><code class="smalltalk">myProxy := TDClientProxy on: '/my-counter'.</code></pre><figcaption></figcaption></figure></p>
+<p>Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their <strong>state</strong> and <strong>actions</strong> as defined on the server-side.</p>
+<ul><li> Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.</li></ul>
+<ul><li> Calls to action methods perform requests that will result in performing the corresponding</li></ul><p>method on the Pharo object asynchronously. Once the action is performed, the proxy will
+be automatically updated with possible new state and actions.</p>
+<p class="todo">have a convention for state vs actions. Have a discussion about how to name action methods and state methods. The developer in Pharo could use a convention to make this explicit. Is it wise to have countState?</p>
 
+<h4>5.2.  Handling asynchronous calls</h4>
+<p>Since action calls are not synchronous, Tide proxies have a special method <code>then:</code> used
+to perform actions only when and if the action is resolved and the proxy updated.</p>
 
-!! Stepping back
-
-We can learn a couple of points from the preceding example:
-
-- Presenter classes are registered as handlers, not instances. Tide will create &quot;per session&quot; instances of the registered class meaning that presenters are not shared between user sessions.
-- The entry point will have a ==handler== associated with a fixed entry point  url =='/my-counter'==. When someone will query that registered url, the presenter will generate ==JSON== data corresponding to its state and actions, and the handler to send it back in a response to the request.
-- Sending JSON is common and trivial using a Pharo package such as NeoJSON. What is much more interesting with Tide is the fact that exchanged data is described with the operations that can be applied to it. It provides an object-oriented view on the data. You get serialized active objects and not plain dead data.
-
-
-!! The Amber part of the application
-
-The next step in our example is to create the Amber-side of this counter application.
-
-SD: say that Amber will do it for us: 
-We will use Amber to render an HTML view of our counter, and perform actions using proxies
-back to the counter defined in Pharo.
-
-!!! The client-side API
-
-On the client-side, root presenters exposed as handler can be accessed by creating proxies:
-SD: It is not clear that we have presenters on Pharo and Amber. We should explain that before section presenters.
-
-[[[
-myProxy := TDClientProxy on: '/my-counter'.
-]]]
-
-Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their &quot;&quot;state&quot;&quot; and &quot;&quot;actions&quot;&quot; as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
-
-- Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.
-
-- Calls to action methods perform requests that will result in performing the corresponding
-method on the Pharo object asynchronously. Once the action is performed, the proxy will
-be automatically updated with possible new state and actions.
-
-
-
-!!! Handling asynchronous calls
-
-Since action calls are not synchronous, Tide proxies have a special method ==then:== used
-to perform actions only when and if the action is resolved and the proxy updated.
-
-
-Sending a message that activates a state method is synchronous as shown in the following snippet.
-[[[
-&quot;synchronous state call&quot;
-myProxy count. &quot;=&gt; 0&quot;
-]]]
-
-Now sending a message that activates a callback is asynchronous and as such we should use the ==then:== message when we want to access the state as shown below: 
-[[[
-&quot;async action call&quot;
+<p>Sending a message that activates a state method is synchronous as shown in the following snippet.
+<figure><pre><code class="smalltalk">&quot;synchronous state call&quot;
+myProxy count. &quot;=&gt; 0&quot;</code></pre><figcaption></figcaption></figure></p>
+<p>Now sending a message that activates a callback is asynchronous and as such we should use the <code>then:</code> message when we want to access the state as shown below: 
+<figure><pre><code class="smalltalk">&quot;async action call&quot;
 myProxy increase; then: [
-    myProxy count &quot;=&gt; 1&quot; ]
-]]]
-
-SD: the developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
-
-!!! The widget class
-
-In Amber's IDE, create a new class ==MyCounterWidget==. 
-
-[[[
-Widget subclass: #MyCounterWidget
+    myProxy count &quot;=&gt; 1&quot; ]</code></pre><figcaption></figcaption></figure></p>
+<h4>5.3.  The widget class</h4>
+<p>In Amber's IDE, create a new class <code>MyCounterWidget</code>. </p>
+<p><figure><pre><code class="smalltalk">Widget subclass: #MyCounterWidget
 	instanceVariableNames: 'counter header'
-	package: 'Tide-Amber-Examples'
-]]]
-
-The widget class has two instance variables: ==counter==, which holds a proxy over the 
-Pharo counter object, and ==header== which  holds a reference on the header tag brush to
-update the UI.
-
-To initialize our counter widget, we connect it to the Pharo counter presenter as follows:
-
-[[[
-MyCounterWidget &gt;&gt; initialize
+	package: 'Tide-Amber-Examples'</code></pre><figcaption></figcaption></figure></p>
+<p>The widget class has two instance variables: <code>counter</code>, which holds a proxy over the 
+Pharo counter object, and <code>header</code> which  holds a reference on the header tag brush to
+update the UI.</p>
+<p>To initialize our counter widget, we connect it to the Pharo counter presenter as follows:</p>
+<p><figure><pre><code class="smalltalk">MyCounterWidget &gt;&gt; initialize
     super initialize.
-    counter := TDClientProxy on: '/my-counter'
-]]]
-
-Note that =='/my-counter'== is the path to the server-side handler for our counter presenter.
-
-We can now create the rendering methods as follows
-
-[[[
-MyCounterWidget &gt;&gt; render
+    counter := TDClientProxy on: '/my-counter'</code></pre><figcaption></figcaption></figure></p>
+<p>Note that <code>'/my-counter'</code> is the path to the server-side handler for our counter presenter.</p>
+<p>We can now create the rendering methods as follows</p>
+<p class="todo">explain #connect</p><p class="todo">explain #appendToJQuery, explain that it renders the widget and calls #renderOn:</p>
+<p class="todo">show renderOn: before and explain the connect and appendToJQuery after that.</p>
+<p><figure><pre><code class="smalltalk">MyCounterWidget &gt;&gt; render
     counter connect then: [
         self appendToJQuery: 'body' asJQuery ]
 
@@ -282,42 +179,37 @@ MyCounterWidget &gt;&gt; renderOn: html
 		with: '++';
 		onClick: [ self increase ].
 	html button 
-		with: '</s>';</p><p>		onClick: [ self decrease ]</p>
-<p>MyCounterWidget &gt;&gt; update
+		with: '--';
+		onClick: [ self decrease ]
+
+MyCounterWidget &gt;&gt; update
 	header contents: [ :html |
-		html with: counter count asString ]
-]]]</p>
+		html with: counter count asString ]</code></pre><figcaption></figcaption></figure></p>
 <p>The <code>render</code> method waits for the counter to be connected, then appends the widget to the
 <code>body</code> element of the page (using the <code>renderOn:</code> method).</p>
-<p>SD: why the previous part is not in the framework. Why any user will have to define it?
-SD: where is the link between appendTOJQuery and renderOn:?</p>
-<p>  <code>renderOn:</code> is a typical widget rendering method using the builtin Amber <code>HTMLCanvas</code>.
+<p><code>renderOn:</code> is a typical widget rendering method using the builtin Amber <code>HTMLCanvas</code>.
 The <code>count</code> message send to the <code>counter</code> proxy will be resolved as a state accessor as
 defined on the server-side.</p>
 <p>Finally instead of updating the entire HTML contents of the counter, <code>update</code> will only 
 update the relevant part, the header.</p>
 <p>We still miss two methods to actually increase and decrease our counter:</p>
 <p><figure><pre><code class="smalltalk">MyCounterWidget &gt;&gt; increase
-	self counter increase.
-	self counter then: [ self update ]
+	counter increase.
+	counter then: [ self update ]
 
 MyCounterWidget &gt;&gt; decrease
-	self counter decrease.
-	self counter then: [ self update ]</code></pre><figcaption></figcaption></figure></p>
-<p>SD: we also miss counter. is it a method that we should define?</p>
-
+	counter decrease.
+	counter then: [ self update ]</code></pre><figcaption></figcaption></figure></p>
 <p>Here's a screenshot of the final counter application:</p>
 <p><figure><img src="images/tide-counter.png"></img><figcaption></figcaption></figure></p>
 
-
-
-
+<p class="todo">show the url of the application and show another state of the counter</p>
 <h2> Actions</h2>
 <p>We have seen in a nutshell in the previous sections how Tide actions work. They allow callbacks
 to be performed from Amber to Pharo objects.</p>
 <p>What we haven't discussed yet is how action callbacks in Tide can pass arguments to Pharo objects.</p>
-<h3>2.  Action arguments</h3>
-<h4>2.1.  Literals</h4>
+<h3>6.  Action arguments</h3>
+<h4>6.1.  Literals</h4>
 <p>Literal objects can be send as arguments to Tide actions. They will be converted to JSON and back in
 Pharo. Any literal that can be serialized to JSON can be send as an argument:</p>
 <ul><li> Numbers</li><li> Booleans</li><li> Strings</li><li> Dictionaries</li><li> Arrays (and OrderedCollections)</li></ul>
@@ -329,21 +221,19 @@ Pharo. Any literal that can be serialized to JSON can be send as an argument:</p
 <p><figure><pre><code class="smalltalk">MyCounterWidget &gt;&gt; increase
     self counter increaseBy: 8; then: [
         self update ]</code></pre><figcaption></figcaption></figure></p>
-<h4>2.2.  References</h4>
+<h4>6.2.  References</h4>
 <p>While sending literals from Amber to Pharo is definitely useful and convenient, it is barely enough for more
 complicated scenarios, where more complex objects have to be sent as arguments.</p>
 <p>To manage this use case, Tide allows references to presenters to be used as action arguments too. 
 This means that any presenter proxy in Amber can be used as an argument to an action argument, and 
 that identity will be preserved on the Pharo side when the action message will be sent.</p>
-<h3>3.  Chaining actions</h3>
+<h3>7.  Chaining actions</h3>
 <p>Tide actions can be easily chained without breaking the sequential flow of the application code, 
 using promises. This is an important property of action callbacks, because all requests done in 
 the client must be asynchronous, quickly leading to &quot;spaghetti callbacks&quot; code.</p>
-<p>SD: here we should have a JS example of async and show how we can express it in tide. </p>
-
-<h4>3.1.  Back to the counter example</h4>
-<p>The following code snippet shows how <code>increase</code> calls to our counter are chained.
-SD: using <code>then:</code></p>
+<p class="todo">here we should have a JS example of async and show how we can express it in tide. </p>
+<h4>7.1.  Back to the counter example</h4>
+<p>The following code snippet shows how <code>increase</code> calls to our counter are chained.</p>
 <p><figure><pre><code class="smalltalk">myCounter := TDClientProxy on: '/my-counter'.
 
 myCounter increase; increase.
@@ -351,9 +241,10 @@ myCounter then: [ myCounter count ]. &quot;=&gt; 2&quot;
 
 10 timesRepeat: [ myCounter decrease ].
 myCounter then: [ myCounter count ]. &quot;=&gt; -8&quot;</code></pre><figcaption></figcaption></figure></p>
-<h2> Presenters</h2>
+<p class="todo:">explain here the state vs action and async nature of actions</p>
+<h2> Presenters</h2><a id="presenters"></a>
 <p>Tide makes it easy to create presenters on domain objects.</p>
-<h3>4.  Root presenters</h3>
+<h3>8.  Root presenters</h3>
 <p>In any Tide application, some presenters must be always accessible at a fixed url. They are called 
 in Tide terminology root presenters. Root presenters are the entry points of Tide application.</p>
 <p>We already saw one root presenter, the <code>MyCounter</code> class.</p>
@@ -362,13 +253,14 @@ class with the corresponding path and create instances per session.</p>
 <p>Note that only one instance of registered root presenter class will be created per session. This 
 ensures that all actions will be performed on the same object.</p>
 
-<h3>5.  Answering new presenters from action callbacks</h3>
+<h3>9.  Answering new presenters from action callbacks</h3>
+<p class="todo">explain that if the action doesn't have an explicit return, it will update the proxy</p>
 <p>One important aspect of Tide presenters is the ability to answer new presenters from action methods.
 From one root presenters several other presenters are accessed by reachability, allowing you to define
 the flow of your application from one root presenter.</p>
 <p>Any object answered from an action method that is not a presenter is converted using <code>#asPresenter</code>. </p>
 
-<h4>5.1.  Example: a login presenter</h4>
+<h4>9.1.  Example: a login presenter</h4>
 <p>To illustrate the flow and security implied by actions and presenter, we will write a small login 
 application.</p>
 <p>Let's start with the login presenter class itself. In order to minimize unnecessary complexity, the 
@@ -434,21 +326,21 @@ possible since the <code>MyUser</code> presenter would not have been answered fr
 instance, thus making the user out of our reach.</p>
 <p><figure><pre><code class="smalltalk">self password &quot;=&gt; 'pass'&quot;.
 self password: 'another_password'</code></pre><figcaption></figcaption></figure></p>
-<h3>6.  Builtin presenter classes</h3>
+<h3>10.  Builtin presenter classes</h3>
 <p>Tide contains convenient presenter classes builtin. Builtin presenter classes can be divided into 
 two categories:</p>
 <ul><li> builtin base presenters (literal and collection presenters)</li><li> model presenters</li></ul>
-<h4>6.1.  Builtin presenters</h4>
+<h4>10.1.  Builtin presenters</h4>
 <p>Tide provides the following default presenter classes:</p>
 <ul><li> <code>TDCollectionPresenter</code>, used by default by all collections but <code>Dictionary</code></li><li> <code>TDDictionaryPresenter</code>, the default presenter for dictionaries</li><li> <code>TDLiteralPresenter</code>, the default presenter for booleans, numbers and strings</li><li> <code>TDModelPresenter</code>, the default presenter for all other objects</li></ul>
-<h3>7.  Custom presenters</h3>
-<h3>8.  Presenters and security</h3>
+<h3>11.  Custom presenters</h3>
+<h3>12.  Presenters and security</h3>
 <p class="todo">explain how actions answering new presenters are important for security</p>
 <h2> Managing sessions</h2>
-<h3>9.  Handling session expiration</h3>
+<h3>13.  Handling session expiration</h3>
 <p class="todo">talk about the hook when sessions expire</p>
-<h3>10.  TDSessionManager</h3>
-<h3>11.  Using custom session classes</h3>
+<h3>14.  TDSessionManager</h3>
+<h3>15.  Using custom session classes</h3>
 <h2> Handlers</h2>
 <p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler.</p>
 
@@ -457,10 +349,10 @@ two categories:</p>
 The reason is that file uploads with the HTTP protocols were not made for asynchronous 
 uploads. Tide tries to solve this problem by abstracting away the implementation details 
 of an AJAX-friendly file upload with the <code>TDFileHandler</code> class.</p>
-<h3>12.  Creating file upload entry points</h3>
+<h3>16.  Creating file upload entry points</h3>
 <h2> Handling exceptions</h2>
 <p class="todo">talk about handling exceptions happening in the Pharo-side from Amber.</p>
-<h3>13.  TDPresenterExceptionHandler</h3>
+<h3>17.  TDPresenterExceptionHandler</h3>
 
 <h2> A more advanced example: </h2>
 <p>We should use the example of the book of Olivier: a comix collection. </p>

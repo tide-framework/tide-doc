@@ -62,7 +62,7 @@ $ ./pharo-ui Pharo.image
 @@todo Would be good to have one release of tide 
 to avoid development. 
 
-@@todo use the pharo cli with the --config option to load tide.
+@@todo use the pharo cli with the config option to load tide.
 
 Once you get the Pharo window open, you have to install the Tide backend part. 
 This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.
