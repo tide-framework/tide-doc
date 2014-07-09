@@ -608,8 +608,20 @@ two categories:
 
 &nbsp;
 
--  base presenters \(literal and collection presenters\)
+-  builtin base presenters \(literal and collection presenters\)
 -  model presenters
+
+
+
+####10\.1\.  Builtin presenters
+
+Tide provides the following default presenter classes:
+
+&nbsp;
+
+-  `TDCollectionPresenter`, used by default by all collections but `Dictionary`
+-  `TDDictionaryPresenter`, the default presenter for dictionaries
+-  `TDLiteralPresenter`, the default presenter for booleans, numbers and strings
 
 
 
@@ -627,14 +639,22 @@ two categories:
 
 
 
+###13\.  Handling session expiration
+
+&nbsp;<p class="todo">talk about the hook when sessions expire</p>
+
+
+###14\.  TDSessionManager
+
+
+
+###15\.  Using custom session classes
+
 
 
 ## Handlers
 
 &nbsp;<p class="todo">should it be there already? It seems too early to talk about that, but I need to introduce the concept in order to talk about the file upload handler\.</p>
-
-
-
 
 
 
@@ -647,13 +667,16 @@ of an AJAX\-friendly file upload with the `TDFileHandler` class\.
 
 
 
-###13\.  Creating file upload entry points
-
-
+###16\.  Creating file upload entry points
 
 
 
 ## Handling exceptions
+
+&nbsp;<p class="todo">talk about handling exceptions happening in the Pharo\-side from Amber\.</p>
+
+
+###17\.  TDPresenterExceptionHandler
 
 
 
