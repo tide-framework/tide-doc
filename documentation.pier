@@ -543,7 +543,7 @@ MyLoginPresenter addUser: (MyUser new
     yourself)
 ]]]
 
-To try out the login presenter, we can create a login proxy and inspect it.
+To try out the login presenter, we can create a login proxy in an Amber workspace and inspect it.
 
 [[[
 (TDClientProxy on: '/my-login') connect; inspect

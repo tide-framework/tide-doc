@@ -337,7 +337,7 @@ MyLoginPresenter addUser: (MyUser new
     username: 'John';
     password: 'pass';
     yourself)</code></pre><figcaption></figcaption></figure></p>
-<p>To try out the login presenter, we can create a login proxy and inspect it.</p>
+<p>To try out the login presenter, we can create a login proxy in an Amber workspace and inspect it.</p>
 <p><figure><pre><code class="smalltalk">(TDClientProxy on: '/my-login') connect; inspect</code></pre><figcaption></figcaption></figure></p>
 <p>Once connected, we can try to login:</p>
 <p><figure><pre><code class="smalltalk">self 

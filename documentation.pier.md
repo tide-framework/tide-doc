@@ -692,7 +692,7 @@ Now we can register our login presenter class and add an user:
 
 
 
-To try out the login presenter, we can create a login proxy and inspect it\.
+To try out the login presenter, we can create a login proxy in an Amber workspace and inspect it\.
 
 &nbsp;
 
