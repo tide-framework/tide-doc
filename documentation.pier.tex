@@ -458,11 +458,6 @@ From one root presenters several other presenters are accessed by reachability, 
 the flow of your application from one root presenter.
 
 Any object answered from an action method that is not a presenter is converted using \ct{\#asPresenter}. 
-\subsection{ A note about security}
-\begin{todo}
-
-explain how actions answering new presenters are important for security
-\end{todo}
 \subsection{ Example: a login presenter}
 To illustrate the flow and security implied by actions and presenter, we will write a small login 
 application.
@@ -594,7 +589,12 @@ Tide provides the following default presenter classes:
 \item  \ct{TDDictionaryPresenter}, the default presenter for dictionaries
 \item  \ct{TDLiteralPresenter}, the default presenter for booleans, numbers and strings
 \end{itemize}
-\section{ Custom presenters}\section{ Presenters and security}\chapter{ Managing sessions}\section{ Handling session expiration}
+\section{ Custom presenters}\section{ Presenters and security}
+\begin{todo}
+
+explain how actions answering new presenters are important for security
+\end{todo}
+\chapter{ Managing sessions}\section{ Handling session expiration}
 \begin{todo}
 
 talk about the hook when sessions expire

@@ -464,9 +464,6 @@ the flow of your application from one root presenter.
 
 Any object answered from an action method that is not a presenter is converted using ==#asPresenter==. 
 
-!!! A note about security
-
-@@todo explain how actions answering new presenters are important for security
 
 !!! Example: a login presenter
 
@@ -589,7 +586,7 @@ Tide provides the following default presenter classes:
 
 !! Presenters and security
 
-
+@@todo explain how actions answering new presenters are important for security
 
 ! Managing sessions
 

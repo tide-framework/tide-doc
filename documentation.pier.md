@@ -598,12 +598,8 @@ Any object answered from an action method that is not a presenter is converted u
 
 
 
-####9\.1\.  A note about security
 
-&nbsp;<p class="todo">explain how actions answering new presenters are important for security</p>
-
-
-####9\.2\.  Example: a login presenter
+####9\.1\.  Example: a login presenter
 
 To illustrate the flow and security implied by actions and presenter, we will write a small login 
 application\.
@@ -759,8 +755,7 @@ Tide provides the following default presenter classes:
 
 ###12\.  Presenters and security
 
-
-
+&nbsp;<p class="todo">explain how actions answering new presenters are important for security</p>
 
 
 ## Managing sessions

@@ -282,9 +282,8 @@ ensures that all actions will be performed on the same object.</p>
 From one root presenters several other presenters are accessed by reachability, allowing you to define
 the flow of your application from one root presenter.</p>
 <p>Any object answered from an action method that is not a presenter is converted using <code>#asPresenter</code>. </p>
-<h4>9.1.  A note about security</h4>
-<p class="todo">explain how actions answering new presenters are important for security</p>
-<h4>9.2.  Example: a login presenter</h4>
+
+<h4>9.1.  Example: a login presenter</h4>
 <p>To illustrate the flow and security implied by actions and presenter, we will write a small login 
 application.</p>
 <p>Let's start with the login presenter class itself. In order to minimize unnecessary complexity, the 
@@ -359,8 +358,7 @@ two categories:</p>
 <ul><li> <code>TDCollectionPresenter</code>, used by default by all collections but <code>Dictionary</code></li><li> <code>TDDictionaryPresenter</code>, the default presenter for dictionaries</li><li> <code>TDLiteralPresenter</code>, the default presenter for booleans, numbers and strings</li></ul>
 <h3>11.  Custom presenters</h3>
 <h3>12.  Presenters and security</h3>
-
-
+<p class="todo">explain how actions answering new presenters are important for security</p>
 <h2> Managing sessions</h2>
 <h3>13.  Handling session expiration</h3>
 <p class="todo">talk about the hook when sessions expire</p>
