@@ -591,13 +591,139 @@ ensures that all actions will be performed on the same object\.
 ###9\.  Answering new presenters from action callbacks
 
 One important aspect of Tide presenters is the ability to answer new presenters from action methods\.
-From one root presenters several other presenters are accessed by reachability\.
+From one root presenters several other presenters are accessed by reachability, allowing you to define
+the flow of your application from one root presenter\.
 
-NP: to be continued
+Any object answered from an action method that is not a presenter is converted using `#asPresenter`\. 
 
 
 
 ####9\.1\.  A note about security
+
+&nbsp;<p class="todo">explain how actions answering new presenters are important for security</p>
+
+
+####9\.2\.  Example: a login presenter
+
+To illustrate the flow and security implied by actions and presenter, we will write a small login 
+application\.
+
+Let's start with the login presenter class itself\. In order to minimize unnecessary complexity, the 
+`TDLoginPresenter` class will hold a class variable `Users` containing all users
+
+&nbsp;
+
+
+    TDPresenter subclass: #MyLoginPresenter
+    	instanceVariableNames: 'currentUser'
+    	classVariableNames: 'Users'
+    	category: 'Examples'
+
+
+
+&nbsp;
+
+
+    MyLoginPresenter class >> initialize
+        Users := OrederedCollection new
+    
+    MyLoginPresenter class >> addUser: anUser
+        ^ Users add: anUser
+
+
+
+To login an user, we validate an username and password against the `Users` collection, and expose 
+the `loginUsername:password:` method as a Tide action:
+
+&nbsp;
+
+
+    MyLoginPresenter >> loginUsername: username password: password
+        <action>
+        ^ currentUser := Users 
+            detect: [ :each | 
+                each username = username and: [ each password = password ] ]
+            ifNone: [ nil ]
+
+
+
+Note that the `#login` method answers the `currentUser` if any\. The user object will be converted
+into a presenter \(instance of `TDModelPresenter`\) automatically and sent back to Amber as the 
+response of the action call\.
+
+We now only miss an user class to fill the login presenter:
+
+&nbsp;
+
+
+    Object subclass: #MyUser
+    	instanceVariableNames: 'username password'
+    	classVariableNames: '
+    	category: 'Examples'
+    
+    MyUser >> username
+        <state>
+        ^ username
+    
+    MyUser >> password
+        <state>
+        ^ password
+    
+    MyUser >> username: aString
+        <action>
+        username := aString
+    
+    MyUser >> password: aString
+        <action>
+        password := aString
+
+
+
+Now we can register our login presenter class and add an user:
+
+&nbsp;
+
+
+    MyLoginPresenter registerAt: 'my-login'.
+    MyLoginPresenter addUser: (MyUser new
+        username: 'John';
+        password: 'pass';
+        yourself)
+
+
+
+To try out the login presenter, we can create a login proxy and inspect it\.
+
+&nbsp;
+
+
+    (TDClientProxy on: '/my-login') connect; inspect
+
+
+
+Once connected, we can try to login:
+
+&nbsp;
+
+
+    self 
+        loginUsername: 'John' password: 'pass';
+        then: [ :user | user inspect ]
+
+
+
+Since the login credentials are valid, Tide will answer and create a presenter on our `MyUser`
+instance, with all four methods defined as state and action\.
+
+In the user proxy inspector, we can now query and change the password:
+
+&nbsp;
+
+
+    self password "=> 'pass'".
+    self password: 'another_password'
+
+
 
 
 

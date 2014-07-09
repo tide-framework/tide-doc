@@ -279,9 +279,75 @@ ensures that all actions will be performed on the same object.</p>
 
 <h3>9.  Answering new presenters from action callbacks</h3>
 <p>One important aspect of Tide presenters is the ability to answer new presenters from action methods.
-From one root presenters several other presenters are accessed by reachability.</p>
-<p>NP: to be continued</p>
+From one root presenters several other presenters are accessed by reachability, allowing you to define
+the flow of your application from one root presenter.</p>
+<p>Any object answered from an action method that is not a presenter is converted using <code>#asPresenter</code>. </p>
 <h4>9.1.  A note about security</h4>
+<p class="todo">explain how actions answering new presenters are important for security</p>
+<h4>9.2.  Example: a login presenter</h4>
+<p>To illustrate the flow and security implied by actions and presenter, we will write a small login 
+application.</p>
+<p>Let's start with the login presenter class itself. In order to minimize unnecessary complexity, the 
+<code>TDLoginPresenter</code> class will hold a class variable <code>Users</code> containing all users</p>
+<p><figure><pre><code class="smalltalk">TDPresenter subclass: #MyLoginPresenter
+	instanceVariableNames: 'currentUser'
+	classVariableNames: 'Users'
+	category: 'Examples'</code></pre><figcaption></figcaption></figure></p>
+<p><figure><pre><code class="smalltalk">
+MyLoginPresenter class &gt;&gt; initialize
+    Users := OrederedCollection new
+
+MyLoginPresenter class &gt;&gt; addUser: anUser
+    ^ Users add: anUser</code></pre><figcaption></figcaption></figure></p>
+<p>To login an user, we validate an username and password against the <code>Users</code> collection, and expose 
+the <code>loginUsername:password:</code> method as a Tide action:</p>
+<p><figure><pre><code class="smalltalk">MyLoginPresenter &gt;&gt; loginUsername: username password: password
+    &lt;action&gt;
+    ^ currentUser := Users 
+        detect: [ :each | 
+            each username = username and: [ each password = password ] ]
+        ifNone: [ nil ]</code></pre><figcaption></figcaption></figure></p>
+<p>Note that the <code>#login</code> method answers the <code>currentUser</code> if any. The user object will be converted
+into a presenter (instance of <code>TDModelPresenter</code>) automatically and sent back to Amber as the 
+response of the action call.</p>
+<p>We now only miss an user class to fill the login presenter:</p>
+<p><figure><pre><code class="smalltalk">Object subclass: #MyUser
+	instanceVariableNames: 'username password'
+	classVariableNames: '
+	category: 'Examples'
+
+MyUser &gt;&gt; username
+    &lt;state&gt;
+    ^ username
+
+MyUser &gt;&gt; password
+    &lt;state&gt;
+    ^ password
+
+MyUser &gt;&gt; username: aString
+    &lt;action&gt;
+    username := aString
+
+MyUser &gt;&gt; password: aString
+    &lt;action&gt;
+    password := aString</code></pre><figcaption></figcaption></figure></p>
+<p>Now we can register our login presenter class and add an user:</p>
+<p><figure><pre><code class="smalltalk">MyLoginPresenter registerAt: 'my-login'.
+MyLoginPresenter addUser: (MyUser new
+    username: 'John';
+    password: 'pass';
+    yourself)</code></pre><figcaption></figcaption></figure></p>
+<p>To try out the login presenter, we can create a login proxy and inspect it.</p>
+<p><figure><pre><code class="smalltalk">(TDClientProxy on: '/my-login') connect; inspect</code></pre><figcaption></figcaption></figure></p>
+<p>Once connected, we can try to login:</p>
+<p><figure><pre><code class="smalltalk">self 
+    loginUsername: 'John' password: 'pass';
+    then: [ :user | user inspect ]</code></pre><figcaption></figcaption></figure></p>
+<p>Since the login credentials are valid, Tide will answer and create a presenter on our <code>MyUser</code>
+instance, with all four methods defined as state and action.</p>
+<p>In the user proxy inspector, we can now query and change the password:</p>
+<p><figure><pre><code class="smalltalk">self password &quot;=&gt; 'pass'&quot;.
+self password: 'another_password'</code></pre><figcaption></figcaption></figure></p>
 <h3>10.  Builtin presenter classes</h3>
 <p>Tide contains convenient presenter classes builtin. Builtin presenter classes can be divided into 
 two categories:</p>
