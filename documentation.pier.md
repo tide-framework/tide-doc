@@ -746,6 +746,7 @@ Tide provides the following default presenter classes:
 -  `TDCollectionPresenter`, used by default by all collections but `Dictionary`
 -  `TDDictionaryPresenter`, the default presenter for dictionaries
 -  `TDLiteralPresenter`, the default presenter for booleans, numbers and strings
+-  `TDModelPresenter`, the default presenter for all other objects
 
 
 
