@@ -1,3 +1,6 @@
+@@todo I need to make it clear that presenters are on the Pharo side only and Proxies in Amber.
+@@todo explain what are state and actions
+
 !Introduction
 
 Have you ever wanted to develop advanced client side applications without having to deal with the asynchronous 
@@ -12,8 +15,6 @@ recreate on the client-side some logic. You get fully described data, therefore 
 
 This documentation will teach how to install and use Tide through examples.  
 We will also learn its architecture and more advanced topics.
-
-SD: What we will learn concretely.
 
 
 ! Installing Tide
@@ -57,9 +58,11 @@ $ ./pharo-ui Pharo.image
 
 !!!! Preparing the Pharo image
 
-SD: We can also do it from the command line and it would be good to show how. 
-SD:Would be good to have one release of tide 
+@@todo We can also do it from the command line and it would be good to show how. 
+@@todo Would be good to have one release of tide 
 to avoid development. 
+
+@@todo use the pharo cli with the --config option to load tide.
 
 Once you get the Pharo window open, you have to install the Tide backend part. 
 This means bringing the Pharo code you cloned from GitHub?? into the Pharo image.
@@ -77,10 +80,9 @@ Metacello new
   load.
 ]]]
 
-
-
-
 SD: Why the following is not in the troubleshooting session and bower install is not executed before?
+
+@@todo we should have a simpler way to install it.
 
 When this is finished, evaluate:
 
@@ -96,8 +98,6 @@ directory, and execute:
 $ bower install
 ]]]
 
-SD: add screenshots
-
 Back in the Pharo window, close the error message and evaluate the same instruction 
 again:
 
@@ -107,8 +107,6 @@ TDDispatcher tideIndexPageUrl inspect
 
 This should give you the URL at which your web browser should be pointed to. 
 Now copy this URL, open your web browser and paste it in the browser's address bar.
-
-SD: why do we need to do this inspects? because it gives the impression that everything is manual?
 
 
 !!! Starting the server
@@ -121,22 +119,13 @@ TDServer startOn: 5000. "Start the server on port 5000"
 TDServer stop. "Stop any running server"
 ]]]
 
-
-
-
-
-
-
-
-
 ! A first example: the traditional counter
 
 To get started with Tide, we will implement the traditional counter example as shown in Figure *tideCounter*. 
 Note that Tide already includes such an example in the ==Tide-Examples== package that you can refer to.
 But better follow step by step the example.
 
-
-+A tide counter>file://images/tide-counter.png|label=tideCounter|width=60+
++A tide counter>file://images/tide-counter.png|label=tideCounter+
 
 SD: picture should be cut in horizontal
 
@@ -159,7 +148,8 @@ TDPresenter subclass: #MyCounter
 
 Note that not all "exposed" objects have to be subclasses of ==TDPresenter==. As we will
 see later, any object can be exposed to Amber using a ==TDModelPresenter== instance
-on the domain object. SD: we should also say that latter we will explain what is a TDPresenter.
+on the domain object. ==TDPresenter== is the root class of the presenter hierarchy. We will
+in *presenters*.
 
 Our class has one instance variable ==count== that we initialize to ==0==:
 
@@ -227,9 +217,6 @@ If we perform a request at ==http://localhost:5000/my-counter==, we get the foll
 }
 ]]]
 
-SD: how can I for example get an inspector on the MyCounter instance to increase it. So that the developer sees it live.
-
-
 
 !! Stepping back
 
@@ -244,20 +231,17 @@ We can learn a couple of points from the preceding example:
 
 The next step in our example is to create the Amber-side of this counter application.
 
-SD: say that Amber will do it for us: 
-We will use Amber to render an HTML view of our counter, and perform actions using proxies
-back to the counter defined in Pharo.
+We will use Amber to render an HTML widget of our counter, and perform actions using Tide proxies of the Pharo counter.
 
 !!! The client-side API
 
 On the client-side, root presenters exposed as handler can be accessed by creating proxies:
-SD: It is not clear that we have presenters on Pharo and Amber. We should explain that before section presenters.
 
 [[[
 myProxy := TDClientProxy on: '/my-counter'.
 ]]]
 
-Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their ""state"" and ""actions"" as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
+Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their ""state"" and ""actions"" as defined on the server-side.
 
 - Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.
 
@@ -265,6 +249,7 @@ Interacting with proxies is performed via messages. However we have two kinds of
 method on the Pharo object asynchronously. Once the action is performed, the proxy will
 be automatically updated with possible new state and actions.
 
+@@todo have a convention for state vs actions. Have a discussion about how to name action methods and state methods. The developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
 
 
 !!! Handling asynchronous calls
@@ -285,8 +270,6 @@ Now sending a message that activates a callback is asynchronous and as such we s
 myProxy increase; then: [
     myProxy count "=> 1" ]
 ]]]
-
-SD: the developer in Pharo could use a convention to make this explicit. Is it wise to have countState?
 
 !!! The widget class
 
@@ -314,6 +297,11 @@ Note that =='/my-counter'== is the path to the server-side handler for our count
 
 We can now create the rendering methods as follows
 
+@@todo explain #connect
+@@todo explain #appendToJQuery, explain that it renders the widget and calls #renderOn:
+
+@@todo show renderOn: before and explain the connect and appendToJQuery after that.
+
 [[[
 MyCounterWidget >> render
     counter connect then: [
@@ -336,10 +324,7 @@ MyCounterWidget >> update
 The ==render== method waits for the counter to be connected, then appends the widget to the
 ==body== element of the page (using the ==renderOn:== method).
 
-SD: why the previous part is not in the framework. Why any user will have to define it?
-SD: where is the link between appendTOJQuery and renderOn:?
-
-  ==renderOn:== is a typical widget rendering method using the builtin Amber ==HTMLCanvas==.
+==renderOn:== is a typical widget rendering method using the builtin Amber ==HTMLCanvas==.
 The ==count== message send to the ==counter== proxy will be resolved as a state accessor as
 defined on the server-side.
 
@@ -350,24 +335,20 @@ We still miss two methods to actually increase and decrease our counter:
 
 [[[
 MyCounterWidget >> increase
-	self counter increase.
-	self counter then: [ self update ]
+	counter increase.
+	counter then: [ self update ]
 
 MyCounterWidget >> decrease
-	self counter decrease.
-	self counter then: [ self update ]
+	counter decrease.
+	counter then: [ self update ]
 ]]]
-
-SD: we also miss counter. is it a method that we should define?
-
 
 Here's a screenshot of the final counter application:
 
 +file://images/tide-counter.png+
 
 
-
-
+@@todo show the url of the application and show another state of the counter
 
 ! Actions
 
@@ -420,13 +401,11 @@ Tide actions can be easily chained without breaking the sequential flow of the a
 using promises. This is an important property of action callbacks, because all requests done in 
 the client must be asynchronous, quickly leading to "spaghetti callbacks" code.
 
-SD: here we should have a JS example of async and show how we can express it in tide. 
-
+@@todo here we should have a JS example of async and show how we can express it in tide. 
 
 !!! Back to the counter example
 
 The following code snippet shows how ==increase== calls to our counter are chained.
-SD: using ==then:==
 
 [[[
 myCounter := TDClientProxy on: '/my-counter'.
@@ -438,7 +417,10 @@ myCounter then: [ myCounter count ]. "=> 2"
 myCounter then: [ myCounter count ]. "=> -8"
 ]]]
 
+@@todo: explain here the state vs action and async nature of actions
+
 ! Presenters
+@presenters
 
 Tide makes it easy to create presenters on domain objects.
 
@@ -457,6 +439,8 @@ ensures that all actions will be performed on the same object.
 
 
 !! Answering new presenters from action callbacks
+
+@@todo explain that if the action doesn't have an explicit return, it will update the proxy
 
 One important aspect of Tide presenters is the ability to answer new presenters from action methods.
 From one root presenters several other presenters are accessed by reachability, allowing you to define
