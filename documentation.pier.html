@@ -343,7 +343,7 @@ MyLoginPresenter addUser: (MyUser new
 <p><figure><pre><code class="smalltalk">self 
     loginUsername: 'John' password: 'pass';
     then: [ :user | user inspect ]</code></pre><figcaption></figcaption></figure></p>
-<p>Since the login credentials are valid, Tide will answer and create a presenter on our <code>MyUser</code>
+<p>Since the login credentials are valid, Tide will create and answer a presenter on our <code>MyUser</code>
 instance, with all four methods defined as state and action.</p>
 <p>In the user proxy inspector, we can now query and change the password:</p>
 <p><figure><pre><code class="smalltalk">self password &quot;=&gt; 'pass'&quot;.

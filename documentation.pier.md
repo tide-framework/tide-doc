@@ -712,7 +712,7 @@ Once connected, we can try to login:
 
 
 
-Since the login credentials are valid, Tide will answer and create a presenter on our `MyUser`
+Since the login credentials are valid, Tide will create and answer a presenter on our `MyUser`
 instance, with all four methods defined as state and action\.
 
 In the user proxy inspector, we can now query and change the password:
