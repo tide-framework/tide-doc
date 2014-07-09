@@ -154,7 +154,7 @@ back to the counter defined in Pharo.</p>
 <p>On the client-side, root presenters exposed as handler can be accessed by creating proxies:
 SD: It is not clear that we have presenters on Pharo and Amber. We should explain that before section presenters.</p>
 <p><figure><pre><code class="smalltalk">myProxy := TDClientProxy on: '/my-counter'.</code></pre><figcaption></figcaption></figure></p>
-<p>Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their <strong>state</strong> and <strong>actions+</strong> as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.</p>
+<p>Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their <strong>state</strong> and <strong>actions</strong> as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.</p>
 <ul><li> Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.</li></ul>
 <ul><li> Calls to action methods perform requests that will result in performing the corresponding</li></ul><p>method on the Pharo object asynchronously. Once the action is performed, the proxy will
 be automatically updated with possible new state and actions.</p>

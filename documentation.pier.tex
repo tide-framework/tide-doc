@@ -253,7 +253,7 @@ myProxy := TDClientProxy on: '/my-counter'.
 \end{code}
 
 
-Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their \textbf{state} and \textbf{actions+} as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
+Interacting with proxies is performed via messages. However we have two kinds of messages. Messages sent to proxies will be resolved using their \textbf{state} and \textbf{actions} as defined on the server-side. SD: what is an actionplus? we did not introduce the terms like that.
 
 \begin{itemize}
 \item  Calls to state methods are resolved locally and synchronously, because the state is passed over to Amber as we previously say in the JSON data.

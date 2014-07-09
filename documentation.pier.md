@@ -334,7 +334,7 @@ SD: It is not clear that we have presenters on Pharo and Amber\. We should expla
 
 
 
-Interacting with proxies is performed via messages\. However we have two kinds of messages\. Messages sent to proxies will be resolved using their **state** and **actions\+** as defined on the server\-side\. SD: what is an actionplus? we did not introduce the terms like that\.
+Interacting with proxies is performed via messages\. However we have two kinds of messages\. Messages sent to proxies will be resolved using their **state** and **actions** as defined on the server\-side\. SD: what is an actionplus? we did not introduce the terms like that\.
 
 &nbsp;
 
